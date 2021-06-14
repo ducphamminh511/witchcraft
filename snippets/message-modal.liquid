@@ -1,0 +1,62 @@
+<div class="loading-modal modal" {% if settings.enable_multilang %}data-translate="cart.ajax_cart.loading"{% endif %}>{{ 'cart.ajax_cart.loading' | t }}...</div>
+<div class="ajax-error-modal modal">
+  <div class="modal-inner">
+    <div class="ajax-error-title" {% if settings.enable_multilang %}data-translate="cart.ajax_cart.error"{% endif %}>{{ 'cart.ajax_cart.error' | t }}</div>
+    <div class="ajax-error-message"></div>
+  </div>
+</div>
+<div class="ajax-success-modal witchcraft-modal modal">
+    <div class="overlay"></div>
+  <div class="content">
+    <div class="row">
+      <div class="col-md-6 my-auto text-center">
+          <img class="cart-added-icon" src="{{'cart-added.png' | asset_img_url: 'small'}}">
+          <span class="cart-added">Cart added!</span>
+          <div class="row mt-4">
+            <div class="col-md-4">
+              <div class="added-product-img mx-auto">
+                <img class="ajax-product-image h-100" alt="&nbsp;" src="" />
+              </div>
+              
+            </div>
+            <div class="col-md-8 text-left">
+              <h5 class="ajax-product-title added-title"></h5>
+              <p class="ajax-product-style mb-0"></p>
+              <span class="ajax-product-color pr-4"></span>
+              <span class="ajax-product-size"></span>
+              
+            </div>
+          </div>
+          <hr style="background: #E5E5E5;"/>
+          <div class="row pl-3 pr-3 mt-4 justify-content-between">
+            <p class="sub-title">QTY:</p>
+            <p class="ajax-product-qty"></p>
+          </div>
+          <div class="row pl-3 pr-3 justify-content-between">
+            <h5 class="subtotal">Subtotal:</h5>
+            <p class="ajax-product-total"></p>
+          </div>
+          <p class="sub-title">Shipping and Tax are Calculated at Checkout</p>
+          <button class="btn-orange continue-shopping w-75 m-0 p-0" onclick="javascript:void(0)" {% if settings.enable_multilang %}data-translate="cart.ajax_cart.continue_shopping"{% endif %}>{{ 'cart.ajax_cart.continue_shopping' | t }}</button>
+          <p class="sub-title mb-0">Or</p>
+          <button class="btn-white btn-go-to-cart w-75 m-0 p-0" onclick="window.location='/cart'" {% if settings.enable_multilang %}data-translate="cart.ajax_cart.go_to_cart"{% endif %}> Go to cart <!--{{ 'cart.ajax_cart.go_to_cart' | t }} --></button>
+      </div>
+      <div class="col-md-6">
+        <h3 class="upsale-heading">You May Also Like</h3>
+        {% assign defaultCollection = 'all-products,all-product-lastest' | split: ',' %}
+        {% assign currentProductHandle = product.handle %}
+
+        {% for collection in product.collections limit: 3%}
+          {% unless defaultCollection contains collection.handle%}
+          {% for product in collection.products %}
+             {% unless product.handle == currentProductHandle %}
+               {% include 'product-on-modal' with product %}
+               {%break%}
+             {% endunless %}
+          {% endfor %}
+          {% endunless %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>    
+</div>

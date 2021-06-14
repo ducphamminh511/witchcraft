@@ -1,0 +1,753 @@
+{% include 'breadcrumb' %}
+
+<div class="product-detail row">
+    <div class="col-12 col-main">
+        <div itemscope itemtype="http://schema.org/Product" class="product">
+{% if product.metafields.loox.num_reviews %}
+	<div itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+		<meta itemprop="ratingValue" content="{{ product.metafields.loox.avg_rating }}"/>
+		<meta itemprop="reviewCount" content="{{ product.metafields.loox.num_reviews }}"/>
+	</div>
+{% endif %}
+            <meta itemprop="url" content="{{ shop.url }}{{ product.url }}">
+            <meta itemprop="image" content="{{ product.featured_image.src | product_img_url: 'grande' }}">
+
+            <div class="row">
+                <div class="col-lg-6  {% if settings.product_image_border %} grid-item-bsorder {% endif %}">
+                    <div class="mb-1 d-block d-md-none">
+                        <header class="product-title product-name text-center {% if collection.previous_product or collection.next_product and settings.display_prev_next_product and collection %}has-btn{% endif %}">
+                            <h2 itemprop="name">
+                                {% if settings.enable_multilang %}
+                                    <span class="lang1">{{ product.title | split: '|' | first }}</span>
+                                    <span class="lang2">{{ product.title | split: '|' | last }}</span>
+                                {% else %}
+                                    <span>{{ product.title | split: '|' | first }}</span>
+                                {% endif %}
+                            </h2>
+                        </header>
+                    </div>
+                    <div class="wrap-reviews mt-1 text-center d-block d-md-none">
+                        <a href="#looxReviews">
+                            <div class="loox-rating" data-id="{{ product.id }}" data-rating="{{ product.metafields.loox.avg_rating }}" data-raters="{{ product.metafields.loox.num_reviews }}">
+                            </div>
+                        </a>
+                    </div>
+                    <div class="wrap-product-image d-flex">
+                        <div id="product-image-preload">
+                            <img src="{{ 'loading.gif' | asset_url }}">
+                        </div>
+                        <div id="more-view-carousel" class="wrap-product-image-list owl-carousel owl-theme">
+
+                            {% for image in product.images %}
+                                    <div class="inner-image">
+                                        <a href="javascript:void(0)"
+                                           data-image="{{ image.src | product_img_url: 'grande' }}"
+                                           data-zoom-image="{{ image.src | product_img_url: 'original' }}">
+                                            <img src="{{ image.src | product_img_url: 'compact' }}"
+                                                 alt="{{ image.alt | escape }}" class="mx-auto">
+                                        </a>
+                                    </div>
+
+                            {% endfor %}
+
+                        </div>
+                        {% if product.images.size == 0 %}
+                            <div class="wrap-product-image-big product-photo-container">
+                                <img src="{{ '' | product_img_url: 'grande' }}" alt="">
+                            </div>
+                        {% else %}
+                            <div class="wrap-product-image-big product-photo-container">
+                                {% assign featured_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
+                                <a href="{{ featured_image | img_url: 'original' }}">
+                                    <img id="product-featured-image" src="{{ featured_image | img_url: 'grande' }}"
+                                         alt="{{ featured_image.alt | escape }}"
+                                         data-zoom-image="{{ featured_image.src | img_url: 'original' }}"/>
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="col-lg-6 product-shop">
+                    <div class="wrap-product-detail">
+                        <div class="promotion_tag_container d-none d-md-block">
+                            <ul>
+                                {% for tag in product.tags %}
+                                    {% if tag == "best-seller" %}
+                                        <li>
+                                            <div class="promotion_tag best-seller-tag"></div>
+                                        </li>
+                                    {% elsif tag == "witch-choice" %}
+                                        <li>
+                                            <div class="promotion_tag witch-choice-tag"></div>
+                                        </li>
+                                    {% elsif tag == "seasonal" %}
+                                        <li>
+                                            <div class="promotion_tag seasonal-tag"></div>
+                                        </li>
+                                    {% elsif tag contains "sale" %}
+                                        <li>
+                                            <div class="promotion_tag sale-tag"><span>{{tag | replace: '-', ' ' |capitalize }}</span></div>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="mb-1  d-none d-md-block">
+                            <header class="product-title product-name {% if collection.previous_product or collection.next_product and settings.display_prev_next_product and collection %}has-btn{% endif %}">
+                                <h2 itemprop="name">
+                                    {% if settings.enable_multilang %}
+                                        <span class="lang1">{{ product.title | split: '|' | first }}</span>
+                                        <span class="lang2">{{ product.title | split: '|' | last }}</span>
+                                    {% else %}
+                                        <span>{{ product.title | split: '|' | first }}</span>
+                                    {% endif %}
+                                </h2>
+                            </header>
+                        </div>
+                        
+                        <div class="wrap-reviews mt-1 d-none d-md-block">
+                            <a href="#looxReviews">
+                                <div class="loox-rating" data-id="{{ product.id }}" data-rating="{{ product.metafields.loox.avg_rating }}" data-raters="{{ product.metafields.loox.num_reviews }}">
+                                </div>
+                            </a>
+                        </div>
+                        <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                            <meta itemprop="priceCurrency" content="{{ shop.currency }}">
+                            <link itemprop="availability"
+                                  href="http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}">
+                            <form action="/cart/add" method="post" enctype="multipart/form-data" id="add-to-cart-form">
+                            {% include 'product-customizer' %}
+
+                                <div class="prices">
+                                    {% if product.compare_at_price > product.price %}
+                                        <span class="price on-sale pr-3" itemprop="price">{{ product.price | money }}</span>
+                                        <span class="compare-price">{{ product.compare_at_price_max | money }}</span>
+
+                                    {% else %}
+                                        <span class="price" itemprop="price">{{ product.price | money }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="variants-products">
+                                    <div class="row">
+                                        <div class="col-md-2 my-auto">
+                                            <div class="title d-flex justify-content-between align-items-center">
+                                                <h4 class="font-weight-lightbold text-capitalize">STYLE</h4>
+        
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7">
+                                            {% assign productstyle_index = -1 %}
+                                            {% for option in product.options %}
+                                              {% if option == "Style" %}
+                                                {% assign productstyle_index = forloop.index0 %}
+                                              {% endif %}
+                                          {% endfor %}
+                                        
+                                        
+                                         {% if productstyle_index >= 0 %}
+                                          <div class="wrap-select-box">
+                                              <select id="select-box-style">
+                                                  {% assign values = '' %}
+                                                  {% for variant in product.variants %}
+                                                      {% assign value = variant.options[productstyle_index] %}
+                                                      {% unless values contains value %}
+                                                      {% assign values = values | join: ',' %}
+                                                      {% assign values = values | append: ',' | append: value %}
+                                                      {% assign values = values | split: ',' %}
+                                                          <option data-id="{{ variant.id  }}" data-url="{{ variant.url }}"{% if forloop.first %} selected{% endif %} value="{{ variant.id }}" data-value="{{ value | handle }}">{{ value }}</option>
+                                                      {% endunless %}
+                                                  {% endfor %}
+                                              </select>
+                                          </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="offset-md-2"></div>
+                                    </div>
+                                </div>
+                                <div id="product-variants">
+                                    {% assign variantCount = product.variants | size %}
+                                    {% if product.available %}
+                                        {% if variantCount > 1 %}
+                                            <select id="product-selectors" name="id" style="display:none">
+                                                {% for variant in product.variants %}
+                                                    <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %}
+                                                            value="{{ variant.id }}">{{ variant.title }}
+                                                        - {{ variant.price | money }}</option>
+                                                {% endfor %}
+                                            </select>
+
+                                            {% if settings.use_color_swatch %}
+                                                {% for option in product.options %}
+                                                    {% include 'swatch' with option %}
+                                                {% endfor %}
+                                            {% endif %}
+                                        {% else %}
+                                            <input type="hidden" name="id" value="{{ product.variants[0].id }}"/>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                {% include 'size-modal' %}
+                                <div class="product-qty">
+                                    <div class="row">
+                                        <div class="col-md-2 my-auto">
+                                            <label for="quantity">QTY</label>
+                                        </div>
+                                        <div class="col-md-2 my-auto">
+                                            {% if product.available %}
+                                            
+                                            <div class="wrap-select-box m-0">
+                                                <select id="quantity-select" name="quantity">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                    <option value="6">6</option>
+                                                    <option value="7">7</option>
+                                                    <option value="8">8</option>
+                                                    <option value="9">9</option>
+                                                    <option value="10">10</option>
+                                                </select>
+                                            </div>
+                                            {%endif%}
+                                        </div>
+                                        <div class="col-md-8 my-auto">
+                                            {% if product.available %}
+                                                <input type="hidden" id="quantity" name="quantity" value="1">
+                                                <div class="buy-now m-0">
+                                                    <input type="submit" name="add" class="btn m-0"
+                                                        {% if settings.enable_multilang %}data-translate="products.product.add_to_cart"{% endif %}
+                                                        id="product-add-to-cart"
+                                                        value="{{ 'products.product.add_to_cart' | t }}">
+                                                </div>
+                                            {% else %}
+                                                <div class="buy-now m-0">
+    
+                                                <input type="submit" name="add" class="btn m-0"
+                                                        {% if settings.enable_multilang %}data-translate="products.product.unavailable"{% endif %}
+                                                        id="product-add-to-cart" disabled
+                                                        value="{{ 'products.product.unavailable' | t }}">
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                </div>
+                              <div><img src="{{ 'payment.png' | asset_img_url: 'master' }}"></div> <br>
+
+                            </form>
+                        </div>
+                        <div>
+                            <div id="pxu_cst"></div>
+                        </div>
+                        <div id="product-detail" class="product-area">
+                            {{ product.description }}
+                        </div>
+                        <div class="wrap-product-info">
+                            <div class="shipping-info">
+                                <p class="text-uppercase font-weight-semibold">Shipping info</p>
+                                <p>Orders ship within 5 to 10 business days. </p>
+                                <p>All products are made-to-order and proudly printed in the United States.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        {{ 'option_selection.js' | shopify_asset_url | script_tag }}
+
+    </div>
+</div>
+
+
+<div class="container p-0">
+    <h2 class="related-collection-heading">Matching item </h2>
+    <div class="row">
+        <div class="col-12 col-md-9">
+            <div class="row matching-items">
+                {% assign counter = 1 %}
+                    {% for collection in product.collections limit:4%}
+                        {% for product in collection.products limit:4%}
+                            <div class="text-center col-6 col-md-3 p-0">
+                                <a rel="nofollow" href="{{ product.url }}" >
+                                    <div class="product-item p-4">
+                                        <div class="product-img mx-auto"><img class="mw-100" src="{{ product | img_url:'large' }}"/></div>
+                                        <div class="product-info">
+                                            <p class="mb-0 pr-0 text-capitalize">{{ product.title | truncate: 50}}</p>
+                                        </div>
+                                        <div class="mt-3 product-prices d-flex ">
+                                            <p class="mb-0 sale">{{ product.price | money_without_trailing_zeros }}</p>
+                                            <p class="mb-0 original">{{ product.compare_at_price_max | money_without_trailing_zeros}}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                
+                            </div>
+                            {% assign counter = counter | plus: 1 %}
+                            {% if counter == 5 %}
+                                {% break %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if counter == 5 %}
+                            {% break %}
+                        {% endif %}
+                    {% endfor %}
+            </div>
+        </div>
+    </div>
+    
+</div>
+<div class="container p-0 mt-4">
+    <h2 class="related-collection-heading">More from menufacturer </h2>
+    <div class="row p-md-5">
+        <div class="col-12 d-none d-md-block">
+            <img src="{{ 'product-about-us.png' | asset_img_url: 'master' }}">
+        </div>
+        <div class="col-12 d-block d-md-none">
+            <img src="{{ 'product-about-us-mobile.png' | asset_img_url: 'master' }}">
+        </div>
+    </div>
+</div>	
+
+<div class="container p-0 mt-4">
+    <h2 class="related-collection-heading">Collections</h2>
+    <div class="row collection-slider owl-carousel m-0">
+        {% for collection in product.collections %}
+            <div class="col-2 p-0 mr-3">
+                <a href="{{collection.url}}">
+                    <div class="related-collection mx-auto d-flex">
+                        <p class="my-auto mx-auto pr-0">{{collection.title}}</p>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="container p-0 mt-4">
+    <h2 class="related-collection-heading">You might also like </h2>
+    <div class="row product-slider product-row owl-carousel m-0">
+        {% for product in collections['all-products'].products %}
+            <div>
+                <a rel="nofollow" href="{{ product.url }}" >
+                    <div class="product-item p-4 m-0">
+                        <div class="product-img mx-auto"><img class="mw-100" src="{{ product | img_url:'large' }}"/></div>
+                        <div class="product-info">
+                            <p class="mb-0 pr-0 text-capitalize">{{ product.title | truncate: 50}}</p>
+                        </div>
+                        <div class="mt-3 product-prices d-flex ">
+                            <p class="mb-0 sale">{{ product.price | money_without_trailing_zeros }}</p>
+                            <p class="mb-0 original">{{ product.compare_at_price_max | money_without_trailing_zeros}}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div id="looxReviews" data-limit="4" data-product-id="{{product.id}}" data-loox-aggregate>{{ product.metafields.loox.reviews }}</div>
+
+<div class="container p-0 mt-4">
+    <h2 class="related-collection-heading">More items to explore </h2>
+    <div class="row product-slider product-row owl-carousel m-0">
+        {% for product in collections['all-product-lastest'].products %}
+            <div>
+                <a rel="nofollow" href="{{ product.url }}" >
+                    <div class="product-item p-4 m-0">
+                        <div class="product-img mx-auto"><img class="mw-100 mx-auto" src="{{ product | img_url:'large' }}"/></div>
+                        <div class="product-info">
+                            <p class="mb-0 pr-0 text-capitalize">{{ product.title | truncate: 50}}</p>
+                        </div>
+                        <div class="mt-3 product-prices d-flex ">
+                            <p class="mb-0 sale">{{ product.price | money_without_trailing_zeros }}</p>
+                            <p class="mb-0 original">{{ product.compare_at_price_max | money_without_trailing_zeros}}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="container p-0 mt-4">
+    <h2 class="related-collection-heading">Recently watched </h2>
+    {% include 'recently-viewed' %}
+</div>
+
+<div class="container p-0 mt-4">
+    <h2 class="related-collection-heading text-md-center">FAQ </h2>
+    <div class="row ">
+        <div class="col-12 col-md-6 faq">
+            <h5 class="mt-md-4" data-toggle="collapse" href="#answer-1" role="button" aria-expanded="false" aria-controls="answer-1">How long will it take to ship my order?</h5>
+            <div class="collapse" id="answer-1">
+                <div class="card card-body">
+                    <p>To provide the best support and make sure you get the right product as fast as possible.</p>
+                    <br/>
+                    <p> Our shipping times contain 3 phase.</p>  
+                    <br/>
+                    <p>Phase 1: Order confirmation (12 hours after place the order)</p>
+                    <p>Phase 2: Production time (3-7 business days)</p>
+                    <p>Phase 3: Shipping time (2-4 business days-  within the USA, 2 to 6 weeks -an international address) </p>
+                </div>
+            </div>
+
+            <h5 class="mt-4" data-toggle="collapse" href="#answer-2" role="button" aria-expanded="false" aria-controls="answer-2">What is the status of my order?</h5>
+            <div class="collapse" id="answer-2">
+                <div class="card card-body">
+                    <p>You can keep track of your order at any time by the email that you placed an order or send us an email at support@witchcraft101.com.</p>
+                </div>
+            </div>
+
+            <h5 class="mt-4" data-toggle="collapse" href="#answer-3" role="button" aria-expanded="false" aria-controls="answer-3">My tracking number isn’t working.</h5>
+            <div class="collapse" id="answer-3">
+                <div class="card card-body">
+                    <p>Tracking numbers can take 1-2 days to appear in the shipping carrier's system. Occasionally, the shipping carrier can lose an order. If the tracking number is still not working within a few days, please contact contact the shipping carrier or send us an email at support@witchcraft101.com</p>
+                </div>
+            </div>
+
+            <h5 class="mt-4" data-toggle="collapse" href="#answer-4" role="button" aria-expanded="false" aria-controls="answer-4">How to change or cancel my order?</h5>
+            <div class="collapse" id="answer-4">
+                <div class="card card-body">
+                    <p>To ensure you receive your favorite products lightning speed, we only accept change in the order in 12 hours since the time you place the order. After 12 hours, you have the responsibility for all the quantities and products you placed and paid.</p>
+                </div>
+            </div>
+
+            <h5 class="mt-4" data-toggle="collapse" href="#answer-5" role="button" aria-expanded="false" aria-controls="answer-5">My order is missing or defective.</h5>
+            <div class="collapse" id="answer-5">
+                <div class="card card-body">
+                    <p>Please send us your order number and a clear photo of the defective product at support@witchcraft101.com</p>
+                </div>
+            </div>
+
+            <h5 class="mt-4" data-toggle="collapse" href="#answer-6" role="button" aria-expanded="false" aria-controls="answer-6">How do I contact customer support?</h5>
+            <div class="collapse" id="answer-6">
+                <div class="card card-body">
+                    <p>We are happy to answer any questions you may have. Please contact customer service at support@witchcraft101.com</p>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-12 col-md-6 faq">
+            <h5 class="mt-4" data-toggle="collapse" href="#answer-7" role="button" aria-expanded="false" aria-controls="answer-7">How do I contact customer support?</h5>
+            <div class="collapse" id="answer-7">
+                <div class="card card-body">
+                    <p>We are happy to answer any questions you may have. Please contact customer service at support@witchcraft101.com</p>
+                </div>
+            </div>
+
+            <h5 class="mt-4" data-toggle="collapse" href="#answer-8" role="button" aria-expanded="false" aria-controls="answer-8">What is your return policy?</h5>
+            <div class="collapse" id="answer-8">
+                <div class="card card-body">
+                    <p>We only accept return after 30 days since you receive the package.</p>
+                </div>
+            </div>
+
+            <h5 class="mt-4" data-toggle="collapse" href="#answer-9" role="button" aria-expanded="false" aria-controls="answer-9">What is your return refund and exchange policy?</h5>
+            <div class="collapse" id="answer-9">
+                <div class="card card-body">
+                    <p>Exchange: We only replace items if they are defective or damaged.</p>
+                    <p>Refund: Once your case is accepted, we will send you an email to notify you of the approval your refund. </p>
+                    <p>If you are approved, then your refund will be processed, and a credit will automatically be applied to your credit card or original method of payment, within a certain amount of days</p>
+                </div>
+            </div>
+
+            <h5 class="mt-4" data-toggle="collapse" href="#answer-10" role="button" aria-expanded="false" aria-controls="answer-10">What payment methods do you accept?</h5>
+            <div class="collapse" id="answer-10">
+                <div class="card card-body">
+                    <p>We currently accept the following forms of payment:</p>
+                    <p>Visa, American Express, Mastercard, Paypal and Discover</p>
+                </div>
+            </div>
+
+            <h5 class="mt-4" data-toggle="collapse" href="#answer-11" role="button" aria-expanded="false" aria-controls="answer-11">DMCA (Report Design)</h5>
+            <div class="collapse" id="answer-11">
+                <div class="card card-body">
+                    <p>We take infringing content concerns seriously and appreciate you taking the time to report a suspected violation. In order to place a formal complaint,please send us an email at support@witchcraft101.com</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function createDescriptionTab() {
+        // description apend data
+        // create tab
+        console.log('abc');
+        let tabbedPanel = '';
+        tabbedPanel += "<ul class='product-menu p-0'><li class='activated' data-tab='1'>DESCRIPTION</li>";
+
+        let tab_counter = 2
+        $.each($('.product-area h3.heading'), function (key, val) {
+            if (!$(val).text()) { return; }
+            tabbedPanel += "<li data-tab=" + tab_counter + ">" + $(val).text() + "</li>";
+            tab_counter += 1;
+        });
+        tabbedPanel += "</ul>";
+
+        // original description
+        let des_rex = /^(.+)<\/h3>/;
+        let arrTabText = $('.product-area').html().split('<h3 class="heading">');
+        let textFirstTab = arrTabText[0];
+        let productDescriptionTabbed = "";
+        let arrTabIds = [];
+
+        // split html and save into tab
+        let counter = 2;
+        $.each(arrTabText, function (key, val) {
+            let rex_result = val.trim().match(des_rex);
+            if (!rex_result || !rex_result[1]) { return; }
+            if (rex_result) {
+                let valTab = val.replace(rex_result[0], '');
+                let tabTitle = rex_result[1].trim().replace(/[^a-zA-Z]/g, "").replace('nbsp', '');
+                arrTabIds.push('#' + tabTitle);
+                productDescriptionTabbed += "<div data-tab=" + counter + ">" + valTab + "</div></div>";
+                counter += 1;
+            }
+        });
+
+        // remainder put back to description
+        productDescriptionTabbed = "<div class='wrap-product-info'><div class='product-description activated' data-tab='1' id='wrapped_text'>"
+            + textFirstTab + "<div class='fade_text'></div><span class='show_text'>Show More</span><span class='hide_text'>Hide This</span></div>" + productDescriptionTabbed + "</div>";
+        if (productDescriptionTabbed.length > 0) {
+            $('h2.description').hide();
+            $('#product-detail').html(tabbedPanel + productDescriptionTabbed);
+        }
+
+        //Remove tab with empty content: empty htm; with length is 5, so if the text length < 6, we will remove it
+        arrTabIds.forEach(function (section) {
+            if ($(section).text().length < 6) {
+                $(section).remove();
+                $("a[href='" + section + "']").remove();
+            }
+        })
+    }
+    
+    $(document).ready(function () {
+        createDescriptionTab();
+        // Button click change content Product Description
+        var des_btn = $('.product-menu li'),
+            des_data = $('.wrap-product-info>div');
+        $('.product-menu li').on('click', function () {
+            let data = $(this).attr('data-tab');
+            if ($(this).hasClass('activated')) {
+                return false;
+            } else {
+                $.merge(des_btn, des_data).removeClass('activated');
+                $(this).addClass('activated');
+                $('.wrap-product-info').find('div[data-tab=' + data + ']').addClass('activated');
+            }
+            if ($(this).text() == 'DESCRIPTION') {
+                $("div#wrapped_text").css({ 'height': '200px' });
+            }
+            else {
+                $("div#wrapped_text").css({ 'height': '0px' });
+            }
+        });
+        $("span.show_text").click(function () {
+            $(this).hide();
+            $("span.hide_text").show();
+            $("div.fade_text").hide();
+            $("div#wrapped_text").css("height", "auto");
+        });
+        $("span.hide_text").click(function () {
+            $(this).hide();
+            $("span.show_text").show();
+            $("div.fade_text").show();
+            $("div#wrapped_text").css("height", "200px");
+        });
+
+        // addTocartHandler();
+        
+
+    })
+</script>
+
+<script>
+    //Shopify.Image.preload({{ product.images | json }}, 'grande');
+
+    {% if settings.display_subtotal and product.available %}
+    //update price when changing quantity
+    function updatePricing() {
+        //try pattern one before pattern 2
+        var regex = /([0-9]+[.|,][0-9]+[.|,][0-9]+)/g;
+        var unitPriceTextMatch = jQuery('.product .price').text().match(regex);
+
+        if (!unitPriceTextMatch) {
+            regex = /([0-9]+[.|,][0-9]+)/g;
+            unitPriceTextMatch = jQuery('.product .price').text().match(regex);
+        }
+
+        if (unitPriceTextMatch) {
+            var unitPriceText = unitPriceTextMatch[0];
+            var unitPrice = unitPriceText.replace(/[.|,]/g, '');
+            var quantity = parseInt(jQuery('#quantity').val());
+            var totalPrice = unitPrice * quantity;
+
+            var totalPriceText = Shopify.formatMoney(totalPrice, window.money_format);
+            regex = /([0-9]+[.|,][0-9]+[.|,][0-9]+)/g;
+            if (!totalPriceText.match(regex)) {
+                regex = /([0-9]+[.|,][0-9]+)/g;
+            }
+            totalPriceText = totalPriceText.match(regex)[0];
+
+            var regInput = new RegExp(unitPriceText, "g");
+            var totalPriceHtml = jQuery('.product .price').html().replace(regInput, totalPriceText);
+
+            jQuery('.product .total-price span').html(totalPriceHtml);
+        }
+    }
+
+    $('#quantity').on('change', updatePricing);
+    
+    {% endif %}
+
+    var selectCallback = function (variant, selector) {
+        console.log('abcxyz')
+
+        var addToCart = jQuery('#product-add-to-cart'),
+            productPrice = jQuery('.product .price'),
+            comparePrice = jQuery('.product .compare-price');
+
+        if (variant) {
+            if (variant.available) {
+                // We have a valid product variant, so enable the submit button
+                addToCart.removeClass('disabled').removeAttr('disabled').val(window.inventory_text.add_to_cart);
+
+            } else {
+                // Variant is sold out, disable the submit button
+                addToCart.val(window.inventory_text.sold_out).addClass('disabled').attr('disabled', 'disabled');
+            }
+
+            // Regardless of stock, update the product price
+            productPrice.html(Shopify.formatMoney(variant.price, "{{ shop.money_format }}"));
+
+            // Also update and show the product's compare price if necessary
+            if (variant.compare_at_price > variant.price) {
+                productPrice.addClass("on-sale")
+                comparePrice
+                    .html(Shopify.formatMoney(variant.compare_at_price, "{{ shop.money_format }}"))
+                    .show();
+            } else {
+                comparePrice.hide();
+                productPrice.removeClass("on-sale");
+            }
+            {% if settings.use_color_swatch %}
+            // BEGIN SWATCHES
+            var form = jQuery('#' + selector.domIdPrefix).closest('form');
+            for (var i = 0, length = variant.options.length; i < length; i++) {
+                console.log(variant.options[i]);
+                var radioButton = form.find('.swatch[data-option-index="' + i + '"] :radio[value="' + variant.options[i] + '"]');
+                console.log(radioButton);
+                if (radioButton.size()) {
+                    radioButton.get(0).checked = true;
+                }
+            }
+            // END SWATCHES
+            {% endif %}
+
+            {% if settings.display_subtotal and product.available %}
+            updatePricing();
+            {% endif %}
+
+            {% if settings.enable_multiple_currencies %}
+            Currency.convertAll('{{ shop.currency }}', jQuery('#currencies').val(), 'span.money', 'money_format');
+            {% endif %}
+
+        } else {
+            // The variant doesn't exist. Just a safeguard for errors, but disable the submit button anyway
+            addToCart.val(window.inventory_text.unavailable).addClass('disabled').attr('disabled', 'disabled');
+        }
+
+        //update variant inventory
+        {% if settings.display_availability %}
+        if (variant.available) {
+            if (variant.inventory_management != null) {
+                jQuery(".product-inventory span").text(variant.inventory_quantity + " " + window.inventory_text.in_stock);
+            } else {
+                jQuery(".product-inventory span").text(window.inventory_text.many_in_stock);
+            }
+        } else {
+            jQuery(".product-inventory span").text(window.inventory_text.out_of_stock);
+        }
+        {% endif %}
+
+        /*begin variant image*/
+        if (variant && variant.featured_image) {
+            var originalImage = jQuery("#product-featured-image");
+            var newImage = variant.featured_image;
+            var element = originalImage[0];
+            Shopify.Image.switchImage(newImage, element, function (newImageSizedSrc, newImage, element) {
+                jQuery('#more-view-carousel img').each(function () {
+                    var grandSize = jQuery(this).attr('src');
+                    grandSize = grandSize.replace('compact', 'grande');
+                    if (grandSize == newImageSizedSrc) {
+                        jQuery(this).parent().trigger('click');
+                        return false;
+                    }
+                });
+            });
+        }
+        /*end of variant image*/
+    };
+
+    jQuery(function ($) {
+        {% if product.available and product.variants.size > 1 %}
+        new Shopify.OptionSelectors('product-selectors', {
+            product: {{ product | json }},
+            onVariantSelected: selectCallback,
+            enableHistoryState: true
+        });
+        {% if settings.use_color_swatch and product.available and product.options.size > 1 %}
+        Shopify.linkOptionSelectors({{ product | json }});
+        {% endif %}
+
+        {% if settings.use_color_swatch != true %}
+        jQuery('.single-option-selector').selectize();
+        jQuery('.selectize-input input').attr("disabled", "disabled");
+        {% endif %}
+
+        {% endif %}
+
+        // Add label if only one product option and it isn't 'Title'. Could be 'Size'.
+        {% if product.options.size == 1 and product.options.first != 'Title' %}
+        $('.selector-wrapper:eq(0)').prepend('<label>{{ product.options.first }}</label>');
+        {% endif %}
+
+        // Hide selectors if we only have 1 variant and its title contains 'Default'.
+        {% if product.variants.size == 1 and product.variants.first.title contains 'Default' %}
+        $('.selector-wrapper').hide();
+        {% endif %}
+
+        // Auto-select first available variant on page load. Otherwise the product looks sold out.
+        {% assign found_one_in_stock = false %}
+        {% for variant in product.variants %}
+        {% if variant.available and found_one_in_stock == false %}
+        {% assign found_one_in_stock = true %}
+        {% for option in product.options %}
+        $('.single-option-selector:eq({{ forloop.index0 }})').val({{ variant.options[forloop.index0] | json }}).trigger('change');
+        {% endfor %}
+        {% endif %}
+        {% endfor %}
+
+        {% if settings.display_product_reviews %}
+        var reviewsTimeout = setInterval(function () {
+            if (jQuery(".spr-badge-caption").length > 0) {
+                jQuery(".spr-badge-caption").on('click', function () {
+                    jQuery('html,body').animate({
+                            scrollTop: jQuery(".panel:last").offset().top
+                        },
+                        '400');
+                    jQuery("#collapse-tab4").collapse('show');
+                });
+                clearInterval(reviewsTimeout);
+            }
+        }, 1000);
+
+        {% endif %}
+
+    });
+</script>

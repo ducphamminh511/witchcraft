@@ -1,0 +1,125 @@
+<div class="upsale">
+    <div class="row pr-4 pl-4 text-center">
+        <div class="upsale-img mx-auto">
+            <img class="h-100" src="{{ product | img_url:'medium' }}">
+        </div>
+        <h6 class="upsale-title w-100 pt-3">{{product.title | upcase}}</h6>
+        <div class="upsale-prices">
+            {% if product.compare_at_price > product.price %}
+                <span class="price on-sale pr-3" itemprop="price">{{ product.price | money }}</span>
+                <span class="compare-price">{{ product.compare_at_price_max | money }}</span>
+    
+            {% else %}
+                <span class="price" itemprop="price">{{ product.price | money }}</span>
+            {% endif %}
+        </div>
+    </div>
+    <div class="upsale-variants-products mt-4">
+        <div class="row">
+            <div class="col-md-2 my-auto">
+                <div class="title d-flex justify-content-between align-items-center">
+                    <h4 class="font-weight-lightbold text-capitalize">STYLE</h4>
+    
+                </div>
+            </div>
+            <div class="col-md-8">
+                {% assign productstyle_index = -1 %}
+                {% for option in product.options %}
+                  {% if option == "Style" %}
+                    {% assign productstyle_index = forloop.index0 %}
+                  {% endif %}
+              {% endfor %}
+            
+            
+             {% if productstyle_index >= 0 %}
+              <div class="wrap-select-box">
+                  <select id="select-box-style">
+                      {% assign values = '' %}
+                      {% for variant in product.variants %}
+                          {% assign value = variant.options[productstyle_index] %}
+                          {% unless values contains value %}
+                          {% assign values = values | join: ',' %}
+                          {% assign values = values | append: ',' | append: value %}
+                          {% assign values = values | split: ',' %}
+                              <option data-id="{{ variant.id  }}" data-url="{{ variant.url }}"{% if forloop.first %} selected{% endif %} value="{{ variant.id }}" data-value="{{ value | handle }}">{{ value }}</option>
+                          {% endunless %}
+                      {% endfor %}
+                  </select>
+              </div>
+                {% endif %}
+            </div>
+            <div class="offset-md-2"></div>
+        </div>
+    </div>
+
+    <div class="upsale-variants-products mt-4" id="product-variants">
+        {% assign variantCount = product.variants | size %}
+        {% if product.available %}
+            {% if variantCount > 1 %}
+                <select id="product-selectors" name="id" style="display:none">
+                    {% for variant in product.variants %}
+                        <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %}
+                                value="{{ variant.id }}">{{ variant.title }}
+                            - {{ variant.price | money }}</option>
+                    {% endfor %}
+                </select>
+    
+                {% if settings.use_color_swatch %}
+                    {% for option in product.options %}
+                        {% include 'swatch' with option %}
+                    {% endfor %}
+                {% endif %}
+            {% else %}
+                <input type="hidden" name="id" value="{{ product.variants[0].id }}"/>
+            {% endif %}
+        {% endif %}
+    </div>
+
+    <div class="product-qty">
+        <div class="row">
+            <div class="col-md-2 my-auto">
+                <label for="quantity">QTY</label>
+            </div>
+            <div class="col-md-4 my-auto">
+                {% if product.available %}
+                
+                <div class="wrap-select-box m-0">
+                    <select id="quantity-select" name="quantity">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+                {%endif%}
+            </div>
+            <div class="col-md-6 my-auto">
+                {% if product.available %}
+                    <input type="hidden" id="quantity" name="quantity" value="1">
+                    <div class="buy-now m-0">
+                        <input type="submit" name="add" class="btn m-0 btn-orange"
+                            {% if settings.enable_multilang %}data-translate="products.product.add_to_cart"{% endif %}
+                            id="product-add-to-cart"
+                            value="{{ 'products.product.add_to_cart' | t }}">
+                    </div>
+                {% else %}
+                    <div class="buy-now m-0">
+
+                    <input type="submit" name="add" class="btn m-0"
+                            {% if settings.enable_multilang %}data-translate="products.product.unavailable"{% endif %}
+                            id="product-add-to-cart" disabled
+                            value="{{ 'products.product.unavailable' | t }}">
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        
+    </div>
+</div>

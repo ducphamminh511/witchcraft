@@ -1,0 +1,171 @@
+{% comment %}
+Refined tags
+{% endcomment %}
+{% if current_tags == blank %}
+{% assign has_refined = false %}
+{% else %}
+{% assign has_refined = true %}
+{% endif %}
+{% for t in current_tags %}
+    {% assign tag = t | strip %}
+{% endfor %}
+<div class="refined-widgets">
+  <h3 class="filter-head-title">Filters</h3>
+  <a href="javascript:void(0)" class="clear-all float-left" {% if has_refined == false %}style="display:none"{% endif %} {% if settings.enable_multilang %}data-translate="collections.sidebar.clear_all"{% endif %}>
+    {{ 'collections.sidebar.clear_all' | t }}
+  </a>
+</div>
+<div class="filter-parent mobile-show" id="sort">
+  <div class="wrap-filter-top mobile-show">
+    <div class="nav-filter"><a class="cancel" href="#">Cancel</a>
+      <div class="nav-title wrap-select-box">
+        <h3>Sort</h3>
+      </div>
+      <button class="cancel">Apply</button>
+    </div>
+  </div>
+  <div class="wrap-sort">
+    <h3 class="filter-head-title"><span>Sort by:</span></h3>
+  </div>
+   <div class="wrap-sort-content">
+    <label class="inputradio">
+      <input type="radio" name="radio" value="best-selling"><span class="text">Top selling</span><span class="checkmark"></span>
+    </label>
+    <label class="inputradio">
+      <input type="radio" name="radio" value="created-descending"><span class="text">Newest</span><span class="checkmark"></span>
+    </label>
+    <label class="inputradio">
+      <input type="radio" name="radio" value="price-ascending"><span class="text">Price:</span><span class="text ml-1">Lowest First</span><span class="checkmark"></span>
+    </label>
+    <label class="inputradio">
+      <input type="radio" name="radio" value="price-descending"><span class="text" >Price:</span><span class="text ml-1">Highest First</span><span class="checkmark"></span>
+    </label>
+  </div>
+  
+</div>
+<div class="filter-parent" id="filter">
+  <div class="wrap-filter-top mobile-show">
+    <div class="nav-filter"><a class="cancel" href="#">Cancel</a>
+      <div class="nav-title wrap-select-box">
+        <h3>Filter</h3>
+      </div>
+      <button class="cancel">Apply</button>
+    </div>
+  </div>
+  {% if settings.enable_shop_by_tags_3 %}
+  <div class="wrap-filter">
+    <div class="filter-title"><a href="#" class="show">
+        <p>{{settings.shop_by_tags_3_title}}</p></a></div>
+    <div class="filter-content">
+      {% assign tags_filter = settings.shop_by_tags_3_list_tags | split: ',' %}
+      {% for tag in tags_filter %}
+        <label class="inputcheckbox">
+          <input type="checkbox" value="{{ tag }}">
+          <span class="text">{{ tag}}</span>
+          <span class="checkmark"></span>
+        </label>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  {% if settings.enable_shop_by_tags_4 %}
+  <div class="wrap-filter">
+    <div class="filter-title"><a href="#" class="show">
+        <p>{{settings.shop_by_tags_4_title}}</p></a></div>
+    <div class="filter-content">
+      {% assign tags_filter = settings.shop_by_tags_4_list_tags | split: ',' %}
+      {% for tag in tags_filter %}
+        <label class="inputcheckbox">
+          <input type="checkbox" value="{{ tag }}">
+          <span class="text">{{ tag}}</span>
+          <span class="checkmark"></span>
+        </label>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  {% if settings.enable_shop_by_tags_5 %}
+  <div class="wrap-filter">
+    <div class="filter-title"><a href="#" class="show">
+        <p>{{settings.shop_by_tags_5_title}}</p></a></div>
+    <div class="filter-content">
+      {% assign tags_filter = settings.shop_by_tags_5_list_tags | split: ',' %}
+      {% for tag in tags_filter %}
+        <label class="inputcheckbox">
+          <input type="checkbox" value="{{ tag }}">
+          <span class="text">{{ tag}}</span>
+          <span class="checkmark"></span>
+        </label>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  
+  {% assign collection_colors = "" %}
+  {% assign collection_types = "" %}
+  
+  {% assign collection_colors_index = 2 %}
+  {% assign collection_types_index = 0 %}
+  
+  
+  {% for product in collection.all_products %}
+  	{% for option in product.options %}
+        {% if option == "Style" %}
+          {% assign collection_types_index = forloop.index0 %}
+  		{% endif %}
+  		{% if option == "Color" %}
+          {% assign collection_colors_index = forloop.index0 %}
+  		{% endif %}
+  	{% endfor %}
+        
+     {% for variant in product.variants %}
+          {% unless collection_colors contains variant.options[collection_colors_index] %}
+              {% assign collection_colors = collection_colors | join: ',' %}
+              {% assign collection_colors = collection_colors | append: ',' | append: variant.options[collection_colors_index] %}
+              {% assign collection_colors = collection_colors | split: ',' %}          
+          {% endunless %}
+          {% unless collection_types contains variant.options[collection_types_index] %} 
+            {% assign collection_types = collection_types | join: ',' %}
+            {% assign collection_types = collection_types | append: ',' | append: variant.options[collection_types_index] %}
+            {% assign collection_types = collection_types | split: ',' %}
+
+          {% endunless %}
+     {% endfor %}
+  {% endfor %}
+  
+  {% if settings.enable_shop_by_tags_2 %}    
+  <div class="wrap-filter">
+    <div class="filter-title"><a href="#">
+        <p>Product Type</p></a></div>
+    <div class="filter-content" style="display:none">
+      {% for ptype in collection_types %}
+      {% if ptype != blank %}    
+      <label class="inputcheckbox">
+          <input type="checkbox" value="{{ ptype }}"><span class="text">{{ ptype }}</span><span class="checkmark"></span>
+      </label>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>  
+  {% endif %}
+  
+  {% if settings.enable_shop_by_tags_1%}  
+  <div class="wrap-filter">
+    <div class="filter-title"><a  href="#">
+        <p>Color</p></a></div>
+    <div class="filter-content"  style="display: none">
+        {% for pcolor in collection_colors %}
+          {% capture shop_by_color_text %}shop_by_color_text_{{ i }}{% endcapture %}
+          {% capture color %}color-{{ i }}.png{% endcapture %}
+
+          {% if pcolor != blank %}    
+            <label class="inputcheckbox" data-url="{{ pcolor | handleize }}">
+              <input type="checkbox" class="coll-filter" value="{{ pcolor | handleize }}">
+              <div class="color" style="background-color: {{ pcolor | split: ' ' | last | handle }}"></div><span class="text">{{pcolor}}</span><span class="checkmark"></span>
+            </label>
+          {% endif %}
+        {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+</div>

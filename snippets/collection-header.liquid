@@ -1,0 +1,27 @@
+<header class=" header-product mobile-hide">
+    <h2>{{ collection.title }}</h2>
+    <select class="form-control custom-select">
+        <option value="best-selling">Top Selling</option>
+        <option value="created-descending">Newest</option>
+        <option value="price-ascending">Price: Lowest First</option>
+        <option value="price-descending">Price: Highest First</option>
+    </select>
+
+</header>
+<script>
+    Shopify.queryParams = {};
+    if (location.search.length) {
+        for (var aKeyValue, i = 0, aCouples = location.search.substr(1).split('&'); i < aCouples.length; i++) {
+            aKeyValue = aCouples[i].split('=');
+            if (aKeyValue.length > 1) {
+                Shopify.queryParams[decodeURIComponent(aKeyValue[0])] = decodeURIComponent(aKeyValue[1]);
+            }
+        }
+    }
+    jQuery('.custom-select')
+        .val('{{ collection.sort_by | default: collection.default_sort_by | escape }}')
+        .bind('change', function() {
+            Shopify.queryParams.sort_by = jQuery(this).val();
+            location.search = jQuery.param(Shopify.queryParams).replace(/\+/g, '%20');
+        });
+</script>

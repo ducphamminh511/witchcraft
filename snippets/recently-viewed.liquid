@@ -1,0 +1,32 @@
+{{ '//ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js' | script_tag }}
+{{ 'jquery.products.min.js' | asset_url | script_tag }}
+
+<div id="recently-viewed-products" class="row product-row d-flex recently-watched owl-carousel m-0" style="display:none">
+</div>
+
+{% raw %}
+<script id="recently-viewed-product-template"  type="text/x-jquery-tmpl">
+  <div class="col-6 col-md-3 p-0">
+      <a rel="nofollow" href="${url}" >
+          <div class="product-item p-4 m-0">
+              <div class="product-img mx-auto"><img class="mw-100 " src="${Shopify.Products.resizeImage(featured_image, "medium")}"/></div>
+              <div class="product-info">
+                  <p class="mb-0 pr-0 text-capitalize" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">${title}</p>
+              </div>
+              <div class="mt-3 product-prices d-flex ">
+                  <p class="mb-0 sale">${Shopify.formatMoney(price)}</p>
+                  <p class="mb-0 original">${Shopify.formatMoney(compare_at_price_min)}</p>
+              </div>
+          </div>
+      </a>
+  </div>
+
+</script>
+{% endraw %}
+
+<script>
+  Shopify.Products.showRecentlyViewed({ 
+    howManyToShow:4
+  });
+
+</script>

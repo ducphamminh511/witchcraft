@@ -1,0 +1,171 @@
+<footer class="site-footer d-flex" role="contentinfo">
+  <div class="footer-container d-none d-md-block my-auto w-100">
+    <div class="row mt-5">
+      <div class="col-md-2 footer-menu">
+        {% for link in linklists.footer-menu-3.links%}
+          <h3 class="footer-menu-heading"> {{link.title}}</h3>
+          <ul>
+            {% for item in linklists[link.handle].links %}
+            <li>
+              <a href="{{item.url}}">{{item.title}}</a>
+            </li>
+          {% endfor %}
+          </ul>
+          
+        {% endfor%}
+      </div>
+      <div class="col-md-2 footer-menu">
+        {% for link in linklists.footer.links%}
+          <h3 class="footer-menu-heading"> {{link.title}}</h3>
+          <ul>
+            {% for item in linklists[link.handle].links %}
+            <li>
+              <a href="{{item.url}}">{{item.title}}</a>
+            </li>
+          {% endfor %}
+          </ul>
+          
+        {% endfor%}
+      </div>
+      <div class="col-md-2 footer-menu">
+        {% for link in linklists.footer-menu-2.links%}
+          <h3 class="footer-menu-heading"> {{link.title}}</h3>
+          <ul>
+            {% for item in linklists[link.handle].links %}
+            <li>
+              <a href="{{item.url}}">{{item.title}}</a>
+            </li>
+          {% endfor %}
+          </ul>
+          
+        {% endfor%}
+      </div>
+      <div class="offset-md-4"></div>
+      <div class="col-md-2 footer-menu">
+        <p class="footer-menu-heading text-right pr-0">CONTACT US</p>
+					<ul class="text-right">
+						<li><a href="#"><svg width="19" height="40" viewBox="0 0 19 40" fill="none"
+									xmlns="http://www.w3.org/2000/svg">
+									<path
+										d="M17.6947 19.9632H12.2256V40H3.93624V19.9632H0V12.9246H3.93624V8.36297C3.93624 5.10117 5.49356 0 12.2992 0L18.4427 0.0245248V6.86695H13.9914C13.0595 6.8179 12.2624 7.52912 12.2134 8.46107C12.2134 8.57143 12.2134 8.68179 12.2256 8.77989V12.9123H18.4182L17.6947 19.9632Z"
+										fill="white" />
+								</svg>
+							</a></li>
+              <li>
+                <p>Email: <a href="mailto:support@twippy.co">support@witchcraft101.com</a></p>
+              </li>
+             
+					</ul>
+					<p class="paypal text-right pr-0">{{ 'twippy_paypal.png' | asset_url | img_tag: 'Paypal' }}</p>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <p class="text-white pl-2">© 2021 Witchcraft101 - 1300 Rosa Parks Blvd. Detroit, MI 48324</p>
+    </div>
+  </div>
+  <div class="footer-mobile-container container d-block mt-5 d-md-none w-100">
+    <div class="row">
+      <div class="col-12 footer-menu">
+        {% for link in linklists.footer-menu-3.links%}
+          <h3 class="footer-menu-heading" data-toggle="collapse" href="#footer-3" role="button" aria-expanded="false" aria-controls="footer-3"> {{link.title}}</h3>
+          <div class="collapse" id="footer-3">
+            <div class="card card-body">
+              {% for item in linklists[link.handle].links %}
+                <a href="{{item.url}}">{{item.title}}</a>
+            {% endfor %}
+            </div>
+          </div>
+        {% endfor%}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 footer-menu">
+        {% for link in linklists.footer.links%}
+          <h3 class="footer-menu-heading" data-toggle="collapse" href="#footer" role="button" aria-expanded="false" aria-controls="footer"> {{link.title}}</h3>
+          <div class="collapse" id="footer">
+            <div class="card card-body">
+              {% for item in linklists[link.handle].links %}
+                <a href="{{item.url}}">{{item.title}}</a>
+            {% endfor %}
+            </div>
+          </div>
+        {% endfor%}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 footer-menu">
+        {% for link in linklists.footer-menu-2.links%}
+          <h3 class="footer-menu-heading" data-toggle="collapse" href="#footer-2" role="button" aria-expanded="false" aria-controls="footer-2"> {{link.title}}</h3>
+          <div class="collapse" id="footer-2">
+            <div class="card card-body">
+              {% for item in linklists[link.handle].links %}
+                <a href="{{item.url}}">{{item.title}}</a>
+            {% endfor %}
+            </div>
+          </div>
+        {% endfor%}
+      </div>
+    </div>
+    <div><hr style="background: #C4C4C4;"/></div>
+    <div class="row">
+      <div class="col-6">
+        <div class="custom-select-wrapper select-lang">
+          <div class="twippy-custom-select">
+            <div class="custom-select__trigger"><span>{{ 'twippy_us_flag.png' | asset_url | img_tag: 'English' }}EN</span>
+              <div class="arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M5.41252 5.1624C5.18471 5.3902 4.81537 5.3902 4.58756 5.1624L1.08756 1.6624C0.859755 1.43459 0.859755 1.06524 1.08756 0.837438C1.31537 0.609632 1.68471 0.609632 1.91252 0.837438L5.00004 3.92496L8.08756 0.837438C8.31537 0.609632 8.68471 0.609632 8.91252 0.837439C9.14033 1.06524 9.14033 1.43459 8.91252 1.6624L5.41252 5.1624Z"
+                    fill="#fff" /></svg></div>
+            </div>
+            <div class="custom-options">
+              <span class="custom-option selected" onclick="doGTranslate('en|en')" data-value="en">{{ 'twippy_us_flag.png' | asset_url | img_tag: 'English' }}English</span>
+              <span class="custom-option" onclick="doGTranslate('en|de')" data-value="ge">{{ 'twippy_ger_flag.png' | asset_url | img_tag: 'German' }}German</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="custom-select-wrapper select-currency">
+          <div class="twippy-custom-select">
+            <div class="custom-select__trigger"><span>USD</span>
+              <div class="arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M5.41252 5.1624C5.18471 5.3902 4.81537 5.3902 4.58756 5.1624L1.08756 1.6624C0.859755 1.43459 0.859755 1.06524 1.08756 0.837438C1.31537 0.609632 1.68471 0.609632 1.91252 0.837438L5.00004 3.92496L8.08756 0.837438C8.31537 0.609632 8.68471 0.609632 8.91252 0.837439C9.14033 1.06524 9.14033 1.43459 8.91252 1.6624L5.41252 5.1624Z"
+                    fill="#fff" /></svg></div>
+            </div>
+            <div class="custom-options">
+              <span class="custom-option selected" data-value="usd">USD $</span>
+              <span class="custom-option" data-value="eur">EUR €</span>
+              <span class="custom-option" data-value="gbp">GBP £</span>
+              <span class="custom-option" data-value="brl">BRL R$</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4 mb-4">
+      <div class="col-1 my-auto">
+        <a href="#"><svg width="19" height="40" viewBox="0 0 19 40" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M17.6947 19.9632H12.2256V40H3.93624V19.9632H0V12.9246H3.93624V8.36297C3.93624 5.10117 5.49356 0 12.2992 0L18.4427 0.0245248V6.86695H13.9914C13.0595 6.8179 12.2624 7.52912 12.2134 8.46107C12.2134 8.57143 12.2134 8.68179 12.2256 8.77989V12.9123H18.4182L17.6947 19.9632Z"
+            fill="white" />
+        </svg>
+      </a>
+      </div>
+      <div class="col-6 my-auto">
+        <h4 class="footer-menu-heading">Email:</h3>
+        <p>support@witchcraft101.com</p>
+      </div>
+      <div class="col-5 my-auto">
+        {{ 'twippy_paypal.png' | asset_url | img_tag: 'Paypal' }}
+      </div>
+    </div>
+  </div>
+</footer>
+<div class="copyright-section container d-block d-md-none p-4">
+    <p>© 2021 Witchcraft101 - 1300 Rosa Parks Blvd. Detroit, MI 48324</p>
+</div>
+{% include 'message-modal' %}

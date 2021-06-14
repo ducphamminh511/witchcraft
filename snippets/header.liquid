@@ -1,0 +1,195 @@
+<header class="site-header d-flex" role="banner">
+  <div class="header-container my-auto w-100 d-none d-md-block">
+    <div class="row">
+      <div class="col-md-1 my-auto">
+        <a href="/">
+          <img class="logo" src="{{'logo.png' | asset_img_url: '200x'}}">
+        </a>
+      </div>
+      <div class="col-md-4 pl-5 d-flex">
+        <div class="input-group w-75 my-auto">
+          <input class="form-control py-2 search-form border-right-none" type="search" value="What are you looking for?"
+            id="example-search-input">
+          <span class="input-group-append ">
+            <button class="btn btn-outline-secondary border search-form border-left-none" type="button">
+              <i class="fa fa-search"></i>
+            </button>
+          </span>
+        </div>
+        <!-- <p class="m-0">Trending searches: </p> -->
+
+      </div>
+      <div class="col-md-7">
+        <div class="nav-container d-flex">
+          <div class="dropdown my-auto mx-4">
+            <div class="nav-menu menu-text">
+              <a class="menu-text">Best selling</a>
+            </div>
+          </div>
+          <div class="dropdown my-auto mx-4">
+            <div class="nav-menu menu-text">Collection</div>
+            <div class="dropdown-content">
+              <div class="secret-part"></div>
+              <div class="menu-part">
+                <div class="dropdown-content-container">
+                  <div class="row pt-5">
+                    <div class="col-3">
+                      <h2 class="menu-heading">Collections</h1>
+                    </div>
+                    <div class="col-8">
+                      <div class="row">
+                        <div class="col-3">
+                          <h4 class="menu-name">First</h3>
+                        </div>
+                        <div class="col-3">
+                          <h4 class="menu-name">Second</h3>
+                        </div>
+                        <div class="col-3">
+                          <h4 class="menu-name">Third</h3>
+                        </div>
+                        <div class="col-3">
+                          <h4 class="menu-name">Fourth</h3>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="dropdown my-auto mx-4">
+            <div class="nav-menu menu-text">Blog</div>
+          </div>
+          <div class="dropdown my-auto mx-4">
+            <div class="nav-menu menu-text">Contact</div>
+          </div>
+
+          <div class="custom-select-wrapper select-lang my-auto mx-4">
+            <div class="twippy-custom-select">
+              <div class="custom-select__trigger"><span>{{ 'twippy_us_flag.png' | asset_url | img_tag: 'English' }}EN</span>
+                <div class="arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M5.41252 5.1624C5.18471 5.3902 4.81537 5.3902 4.58756 5.1624L1.08756 1.6624C0.859755 1.43459 0.859755 1.06524 1.08756 0.837438C1.31537 0.609632 1.68471 0.609632 1.91252 0.837438L5.00004 3.92496L8.08756 0.837438C8.31537 0.609632 8.68471 0.609632 8.91252 0.837439C9.14033 1.06524 9.14033 1.43459 8.91252 1.6624L5.41252 5.1624Z"
+                        fill="#121212" /></svg></div>
+              </div>
+              <div class="custom-options">
+                <span class="custom-option selected" onclick="doGTranslate('en|en')" data-value="en">{{ 'twippy_us_flag.png' | asset_url | img_tag: 'English' }}English</span>
+                <span class="custom-option" onclick="doGTranslate('en|de')" data-value="ge">{{ 'twippy_ger_flag.png' | asset_url | img_tag: 'German' }}German</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="custom-select-wrapper select-currency my-auto mx-4">
+            <div class="twippy-custom-select">
+              <div class="custom-select__trigger"><span>USD</span>
+                <div class="arrow"><svg width="10" height="6" viewBox="0 0 10 6" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M5.41252 5.1624C5.18471 5.3902 4.81537 5.3902 4.58756 5.1624L1.08756 1.6624C0.859755 1.43459 0.859755 1.06524 1.08756 0.837438C1.31537 0.609632 1.68471 0.609632 1.91252 0.837438L5.00004 3.92496L8.08756 0.837438C8.31537 0.609632 8.68471 0.609632 8.91252 0.837439C9.14033 1.06524 9.14033 1.43459 8.91252 1.6624L5.41252 5.1624Z"
+                        fill="#121212" /></svg></div>
+              </div>
+              <div class="custom-options">
+                <span class="custom-option selected" data-value="usd">USD $</span>
+                <span class="custom-option" data-value="eur">EUR €</span>
+                <span class="custom-option" data-value="gbp">GBP £</span>
+                <span class="custom-option" data-value="brl">BRL R$</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="dropdown my-auto mx-4">
+            <div class="nav-menu ">
+              <a href="/apps/trackorder" class="menu-text">Track your order</a>
+            </div>
+          </div>
+
+          <div class="dropdown my-auto mx-4">
+            <div class="nav-menu menu-text">
+              <a class="cart added" href="/cart">
+                <svg class="pc" width="24" height="23" viewBox="0 0 24 23" fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M7 21C7 19.8954 7.89543 19 9 19C10.1046 19 11 19.8954 11 21C11 22.1046 10.1046 23 9 23C7.89543 23 7 22.1046 7 21Z"
+                    fill="black" />
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M18 21C18 19.8954 18.8954 19 20 19C21.1046 19 22 19.8954 22 21C22 22.1046 21.1046 23 20 23C18.8954 23 18 22.1046 18 21Z"
+                    fill="black" />
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M0 1C0 0.447715 0.447715 0 1 0H5C5.47663 0 5.88701 0.336385 5.98055 0.803743L6.82043 5H23C23.298 5 23.5805 5.13293 23.7705 5.36256C23.9605 5.59218 24.0381 5.89458 23.9823 6.18733L22.3809 14.5848C22.2437 15.2754 21.868 15.8958 21.3195 16.3373C20.7738 16.7766 20.0916 17.011 19.3914 17H9.68864C8.98837 17.011 8.3062 16.7766 7.76048 16.3373C7.21225 15.8959 6.83664 15.2759 6.69933 14.5857C6.69927 14.5854 6.69939 14.5859 6.69933 14.5857L5.02879 6.2392C5.02201 6.21159 5.01638 6.18353 5.01195 6.15508L4.18032 2H1C0.447715 2 0 1.55228 0 1ZM7.22073 7L8.66084 14.1952C8.70656 14.4254 8.83179 14.6322 9.01461 14.7793C9.19743 14.9265 9.42619 15.0047 9.66084 15.0002L9.68 15H19.4L19.4192 15.0002C19.6538 15.0047 19.8826 14.9265 20.0654 14.7793C20.2474 14.6328 20.3723 14.4273 20.4185 14.1984L21.7913 7H7.22073Z"
+                    fill="black" />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+         
+
+          
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="header-mobile-container container my-auto d-block d-md-none">
+    <div class="row">
+      <div class="col-3 text-center d-flex">
+        <div class="mx-auto my-auto" id="menu_mobile" onclick="openNav()">
+          <img src="{{'menu.png' | | asset_img_url: 'master'}}">
+        </div>
+      </div>
+      <div class="col-6 text-center d-flex">
+        <div class="mx-auto my-auto">
+          <a href="/">
+            <img class="logo" src="{{'logo.png' | asset_img_url: '100x'}}">
+          </a>
+        </div>
+      </div>
+      <div class="col-3 text-center d-flex">
+        <div class="mx-auto my-auto">
+          <img src="{{'shopping-cart.png' | | asset_img_url: 'master'}}">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="offset-1"></div>
+      <div class="col-10 p-0">
+        <div class="input-group w-100 my-auto">
+          <input class="form-control py-2 search-form border-right-none" type="search" placeholder="What are you looking for?"
+            id="example-search-input">
+          <span class="input-group-append ">
+            <button class="btn btn-outline-secondary border search-form border-left-none" type="button">
+              <i class="fa fa-search"></i>
+            </button>
+          </span>
+        </div>
+      </div>
+      <div class="offset-1"></div>
+    </div>
+  </div>
+</header>
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="#">Best Selling</a>
+  <a data-toggle="collapse" href="#collectionCollapse" role="button" aria-expanded="false" aria-controls="collectionCollapse">Collection</a>
+  <div class="collapse" id="collectionCollapse">
+    <div class="card card-body">
+      <a>Fightful Design</a>
+      <a>Witch Clothing</a>
+      <a>Mug</a>
+      <a>Type Of Witch</a>
+      <a>Popular Quotes</a>
+    </div>
+  </div>
+  <a href="#">Blocks</a>
+  <a href="#">Contact</a>
+</div>
+<script>
+  function openNav() {
+    document.getElementById("mySidenav").style.width = "100%";
+  }
+
+  function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+  }
+</script>
