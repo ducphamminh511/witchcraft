@@ -97,7 +97,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       
     <div class="quick-view"></div>
 
-    <main class="main-content {% if template contains 'index' or template contains 'contact' %}{% else %}container{% endif %}" role="main">
+    <main class="main-content {% if template contains 'index' or template contains 'contact' or template contains 'cart' %}{% else %}container{% endif %} 
+    {% if template contains 'cart' %}dark-white-background{% endif %}" role="main">
       {{ content_for_layout }}
     </main>
 
@@ -120,5 +121,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     Shopify.Products.recordRecentlyViewed({howManyToShow:4});
   </script>
 {% endif %}
+
+<script>
+  $(document).ready(function(){
+    $('.custom-select-wrapper').on('click', function() {
+        var custom = $(this).find('.twippy-custom-select');
+        if (custom.hasClass('open')) {
+            $('.twippy-custom-select').removeClass('open');
+        } else {
+            $('.twippy-custom-select').removeClass('open');
+            custom.addClass('open');
+        }
+    });
+    $('.custom-option').on('click', function() {
+        if (!$(this).hasClass('selected')) {
+            $(this).parent().find('span').removeClass('selected');
+            $(this).addClass('selected');
+            if ($(this).parents().hasClass('select-lang')) {
+                let trigger = $(this).parents('.twippy-custom-select').find('.custom-select__trigger span');
+                trigger.empty().append($(this).clone().find('img'),$(this).attr('data-value'));
+            } else {
+                $(this).parents('.twippy-custom-select').find('.custom-select__trigger span').text($(this).attr('data-value'));
+            }
+        }
+    });
+  })
+</script>
 </body>
 </html>

@@ -85,7 +85,7 @@
                                         <li>
                                             <div class="promotion_tag seasonal-tag"></div>
                                         </li>
-                                    {% elsif tag contains "sale" %}
+                                    {% elsif tag contains "sale-" %}
                                         <li>
                                             <div class="promotion_tag sale-tag"><span>{{tag | replace: '-', ' ' |capitalize }}</span></div>
                                         </li>
@@ -131,22 +131,21 @@
 
                                 <div class="variants-products">
                                     <div class="row">
+                                        {% assign productstyle_index = -1 %}
+                                            {% for option in product.options %}
+                                              {% if option == "Style" %}
+                                                {% assign productstyle_index = forloop.index0 %}
+                                              {% endif %}
+                                            {% endfor %}
+                                        {% if productstyle_index >= 0 %}
                                         <div class="col-md-2 my-auto">
+                                            
                                             <div class="title d-flex justify-content-between align-items-center">
                                                 <h4 class="font-weight-lightbold text-capitalize">STYLE</h4>
         
                                             </div>
                                         </div>
                                         <div class="col-md-7">
-                                            {% assign productstyle_index = -1 %}
-                                            {% for option in product.options %}
-                                              {% if option == "Style" %}
-                                                {% assign productstyle_index = forloop.index0 %}
-                                              {% endif %}
-                                          {% endfor %}
-                                        
-                                        
-                                         {% if productstyle_index >= 0 %}
                                           <div class="wrap-select-box">
                                               <select id="select-box-style">
                                                   {% assign values = '' %}
@@ -161,9 +160,10 @@
                                                   {% endfor %}
                                               </select>
                                           </div>
-                                            {% endif %}
+                                            
                                         </div>
                                         <div class="offset-md-2"></div>
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div id="product-variants">
@@ -194,7 +194,7 @@
                                         <div class="col-md-2 my-auto">
                                             <label for="quantity">QTY</label>
                                         </div>
-                                        <div class="col-md-2 my-auto">
+                                        <div class="col-md-2 pt-2 my-auto">
                                             {% if product.available %}
                                             
                                             <div class="wrap-select-box m-0">
@@ -213,7 +213,7 @@
                                             </div>
                                             {%endif%}
                                         </div>
-                                        <div class="col-md-8 my-auto">
+                                        <div class="col-md-8 pt-2 my-auto">
                                             {% if product.available %}
                                                 <input type="hidden" id="quantity" name="quantity" value="1">
                                                 <div class="buy-now m-0">
@@ -236,7 +236,7 @@
                                     
                                     
                                 </div>
-                              <div><img src="{{ 'payment.png' | asset_img_url: 'master' }}"></div> <br>
+                              <div class="mt-4"><img src="{{ 'payment.png' | asset_img_url: 'master' }}"></div> <br>
 
                             </form>
                         </div>
@@ -267,21 +267,23 @@
 <div class="container p-0">
     <h2 class="related-collection-heading">Matching item </h2>
     <div class="row">
-        <div class="col-12 col-md-9">
+        <div class="col-12 col-md-10">
             <div class="row matching-items">
                 {% assign counter = 1 %}
                     {% for collection in product.collections limit:4%}
                         {% for product in collection.products limit:4%}
                             <div class="text-center col-6 col-md-3 p-0">
                                 <a rel="nofollow" href="{{ product.url }}" >
-                                    <div class="product-item p-4">
-                                        <div class="product-img mx-auto"><img class="mw-100" src="{{ product | img_url:'large' }}"/></div>
-                                        <div class="product-info">
-                                            <p class="mb-0 pr-0 text-capitalize">{{ product.title | truncate: 50}}</p>
+                                    <div class="product-item p-4 m-0">
+                                        <div class="product-img text-center mx-auto"><img class="mw-100 mx-auto" src="{{ product | img_url:'large' }}"/></div>
+                                        <div class="product-info text-left">
+                                            <p class="mt-3 mb-0 pr-0 text-capitalize">{{ product.title | truncate: 50}}</p>
                                         </div>
                                         <div class="mt-3 product-prices d-flex ">
-                                            <p class="mb-0 sale">{{ product.price | money_without_trailing_zeros }}</p>
-                                            <p class="mb-0 original">{{ product.compare_at_price_max | money_without_trailing_zeros}}</p>
+                                            <p class="mb-0 my-auto sale">{{ product.price | money_without_trailing_zeros }}</p>
+                                            {% unless product.compare_at_price_max == 0 %}
+                                            <p class="mb-0 my-auto original">{{ product.compare_at_price_max | money_without_trailing_zeros}}</p>
+                                            {% endunless %}
                                         </div>
                                     </div>
                                 </a>
@@ -301,19 +303,25 @@
     </div>
     
 </div>
-<div class="container p-0 mt-4">
+<div class="container p-0 mt-5">
     <h2 class="related-collection-heading">More from menufacturer </h2>
     <div class="row p-md-5">
-        <div class="col-12 d-none d-md-block">
+        <div class="col-12 d-none d-md-block text-center">
             <img src="{{ 'product-about-us.png' | asset_img_url: 'master' }}">
         </div>
-        <div class="col-12 d-block d-md-none">
+        <div class="col-12 d-block d-md-none text-center">
             <img src="{{ 'product-about-us-mobile.png' | asset_img_url: 'master' }}">
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-12 text-center">
+            <img src="{{ 'policy.png' | asset_img_url: 'master' }}">
         </div>
     </div>
 </div>	
 
-<div class="container p-0 mt-4">
+<div class="container p-0 mt-5">
     <h2 class="related-collection-heading">Collections</h2>
     <div class="row collection-slider owl-carousel m-0">
         {% for collection in product.collections %}
@@ -328,20 +336,22 @@
     </div>
 </div>
 
-<div class="container p-0 mt-4">
+<div class="container p-0 mt-5">
     <h2 class="related-collection-heading">You might also like </h2>
     <div class="row product-slider product-row owl-carousel m-0">
         {% for product in collections['all-products'].products %}
             <div>
                 <a rel="nofollow" href="{{ product.url }}" >
-                    <div class="product-item p-4 m-0">
-                        <div class="product-img mx-auto"><img class="mw-100" src="{{ product | img_url:'large' }}"/></div>
+                    <div class="product-item p-2 m-0">
+                        <div class="product-img text-center mx-auto"><img class="mw-100 mx-auto" src="{{ product | img_url:'large' }}"/></div>
                         <div class="product-info">
-                            <p class="mb-0 pr-0 text-capitalize">{{ product.title | truncate: 50}}</p>
+                            <p class="mb-0 mt-3 pr-0 text-capitalize">{{ product.title | truncate: 50}}</p>
                         </div>
                         <div class="mt-3 product-prices d-flex ">
-                            <p class="mb-0 sale">{{ product.price | money_without_trailing_zeros }}</p>
-                            <p class="mb-0 original">{{ product.compare_at_price_max | money_without_trailing_zeros}}</p>
+                            <p class="mb-0 my-auto sale">{{ product.price | money_without_trailing_zeros }}</p>
+                            {% unless product.compare_at_price_max == 0 %}
+                            <p class="mb-0 my-auto original">{{ product.compare_at_price_max | money_without_trailing_zeros}}</p>
+                            {% endunless %}
                         </div>
                     </div>
                 </a>
@@ -352,20 +362,22 @@
 
 <div id="looxReviews" data-limit="4" data-product-id="{{product.id}}" data-loox-aggregate>{{ product.metafields.loox.reviews }}</div>
 
-<div class="container p-0 mt-4">
+<div class="container p-0 mt-5">
     <h2 class="related-collection-heading">More items to explore </h2>
     <div class="row product-slider product-row owl-carousel m-0">
         {% for product in collections['all-product-lastest'].products %}
             <div>
                 <a rel="nofollow" href="{{ product.url }}" >
-                    <div class="product-item p-4 m-0">
-                        <div class="product-img mx-auto"><img class="mw-100 mx-auto" src="{{ product | img_url:'large' }}"/></div>
+                    <div class="product-item p-2 m-0">
+                        <div class="product-img text-center mx-auto"><img class="mw-100 mx-auto" src="{{ product | img_url:'large' }}"/></div>
                         <div class="product-info">
-                            <p class="mb-0 pr-0 text-capitalize">{{ product.title | truncate: 50}}</p>
+                            <p class="mb-0 mt-3 pr-0 text-capitalize">{{ product.title | truncate: 50}}</p>
                         </div>
                         <div class="mt-3 product-prices d-flex ">
-                            <p class="mb-0 sale">{{ product.price | money_without_trailing_zeros }}</p>
-                            <p class="mb-0 original">{{ product.compare_at_price_max | money_without_trailing_zeros}}</p>
+                            <p class="mb-0 my-auto sale">{{ product.price | money_without_trailing_zeros }}</p>
+                            {% unless product.compare_at_price_max == 0 %}
+                            <p class="mb-0 my-auto original">{{ product.compare_at_price_max | money_without_trailing_zeros}}</p>
+                            {% endunless %}
                         </div>
                     </div>
                 </a>
@@ -373,13 +385,13 @@
         {% endfor %}
     </div>
 </div>
-<div class="container p-0 mt-4">
+<div class="container p-0 mt-5">
     <h2 class="related-collection-heading">Recently watched </h2>
     {% include 'recently-viewed' %}
 </div>
 
-<div class="container p-0 mt-4">
-    <h2 class="related-collection-heading text-md-center">FAQ </h2>
+<div class="container p-0 mt-5">
+    <h2 class="related-collection-heading text-md-center">F.A.Q </h2>
     <div class="row ">
         <div class="col-12 col-md-6 faq">
             <h5 class="mt-md-4" data-toggle="collapse" href="#answer-1" role="button" aria-expanded="false" aria-controls="answer-1">How long will it take to ship my order?</h5>
@@ -751,3 +763,4 @@
 
     });
 </script>
+

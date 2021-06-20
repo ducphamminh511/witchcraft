@@ -9,21 +9,61 @@
     <div class="overlay"></div>
   <div class="content">
     <div class="row">
-      <div class="col-md-6 my-auto text-center">
-          <img class="cart-added-icon" src="{{'cart-added.png' | asset_img_url: 'small'}}">
-          <span class="cart-added">Cart added!</span>
+      <div class="col-md-12 my-auto text-center">
+        <img class="cart-added-icon" src="{{'cart-added.png' | asset_img_url: 'small'}}">
+        <span class="cart-added">Cart added!</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-5 my-auto text-center upsale">
+        <div class="upsale-img mx-auto">
+          <img class="ajax-product-image h-100" alt="&nbsp;" src="" />
+        </div>
+        <h6 class="upsale-title ajax-product-title text-center w-100 pt-3"></h6>
+        <p class="ajax-product-style mb-0"></p>
+        <span class="ajax-product-color pr-4"></span>
+        <span class="ajax-product-size"></span>
+
+      </div>
+      <div class="col-md-7 my-auto text-center">
+        <h6 class="free-shipping-heading mb-3" id="freeship_heading">
+          {% if cart.total_price < 7500 %}
+          <span style="color:#F68F36;">{{7500  | minus: cart.total_price | money}}</span> away from FREE shipping
+          {% else %}
+          <span style="color:#F68F36;">FREE</span> shipping
+          {% endif %}
+          
+        </h6>
+        <div class="progress">
+          <div id="modal_progress_bar" class="progress-bar" role="progressbar" aria-valuenow="{{ cart.total_price }}" aria-valuemin="0" aria-valuemax="{{7500}}"></div>
+        </div>
+        <div class="d-flex justify-content-between w-100 pt-2">
+          <h4>$0</h4>
+          <h4>$75</h4>
+        </div>
+        <div class="w-100 mt-5 d-flex justify-content-between">
+          <h6 class="">QTY:</h6>
+          <h6 class=" ajax-product-qty"></h6>
+        </div>
+        <div class="w-100 d-flex justify-content-between">
+          <h5 class="cart-subtotal">Subtotal:</h5>
+          <p id="product-total" class="subtotal ajax-product-total"></p>
+          <input id="cart_total" type="hidden" value="{{cart.total_price}}">
+        </div>
+        <p class="sub-title w-100 text-center p-0">Shipping and Tax are Calculated at Checkout</p>
+        <button class="btn-orange continue-shopping w-75 m-0 p-0" onclick="javascript:void(0)" {% if settings.enable_multilang %}data-translate="cart.ajax_cart.continue_shopping"{% endif %}>{{ 'cart.ajax_cart.continue_shopping' | t }}</button>
+        <p class="sub-title mb-0">Or</p>
+        <button class="btn-white btn-go-to-cart w-75 m-0 p-0" onclick="window.location='/cart'" {% if settings.enable_multilang %}data-translate="cart.ajax_cart.go_to_cart"{% endif %}> Go to cart <!--{{ 'cart.ajax_cart.go_to_cart' | t }} --></button>
+      </div>
+       {%- comment -%}
+       <div class="col-md-12 my-auto text-center">
           <div class="row mt-4">
             <div class="col-md-4">
-              <div class="added-product-img mx-auto">
-                <img class="ajax-product-image h-100" alt="&nbsp;" src="" />
-              </div>
+              
               
             </div>
             <div class="col-md-8 text-left">
-              <h5 class="ajax-product-title added-title"></h5>
-              <p class="ajax-product-style mb-0"></p>
-              <span class="ajax-product-color pr-4"></span>
-              <span class="ajax-product-size"></span>
+              
               
             </div>
           </div>
@@ -41,6 +81,7 @@
           <p class="sub-title mb-0">Or</p>
           <button class="btn-white btn-go-to-cart w-75 m-0 p-0" onclick="window.location='/cart'" {% if settings.enable_multilang %}data-translate="cart.ajax_cart.go_to_cart"{% endif %}> Go to cart <!--{{ 'cart.ajax_cart.go_to_cart' | t }} --></button>
       </div>
+     
       <div class="col-md-6">
         <h3 class="upsale-heading">You May Also Like</h3>
         {% assign defaultCollection = 'all-products,all-product-lastest' | split: ',' %}
@@ -57,6 +98,21 @@
           {% endunless %}
         {% endfor %}
       </div>
+      {%- endcomment -%}
+      
     </div>
   </div>    
 </div>
+
+<script>
+  $(document).ready(function(){
+    var product_total = $('#product-total').text();
+    var cart_total = $('#cart_total').val();
+    product_total = product_total.replace('$','');
+    product_total = parseInt(product_total);
+    product_total = product_total*100; 
+    console.log(product_total);
+    console.log(cart_total);
+  })
+  
+</script>

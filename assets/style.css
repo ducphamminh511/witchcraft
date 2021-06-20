@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;700&display=swap');
 .site-header {
     height: 130px;
     background-color: transpargrent;
@@ -15,7 +16,8 @@
 }
 
 .header-container .logo {
-    width: 100%;
+    width: auto;
+    height: 100%;
 }
 
 .dropdown {
@@ -60,18 +62,23 @@
 }
 
 .search-form {
-    border: 1px solid #6a3405 !important;
+    border: 1px solid #6a3405!important;
     box-sizing: border-box;
-    border-radius: 10px;
-    color: #6a3405;
+    border-radius: 10px !important;
+    color: #6a3405 !important;
 }
 
 .border-right-none {
     border-right: none !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
 }
 
 .border-left-none {
+    border-radius: 6px;
     border-left: none !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
 }
 
 .menu-text {
@@ -83,27 +90,31 @@
 }
 
 .menu-heading {
-    color: #121212;
-    font-weight: 400;
+    font-family: Arapey !important;
     font-style: italic;
+    font-weight: normal;
     font-size: 48px;
     line-height: 77px;
+    color: #121212;
 }
 
 .menu-name {
-    color: #121212;
-    font-weight: 700;
+    font-family: Inter !important;
     font-style: normal;
+    font-weight: bold;
     font-size: 14px;
     line-height: 20px;
+    text-transform: uppercase;
+    color: #121212 !important;
 }
 
 .menu-item {
-    color: #121212;
-    font-weight: 400;
+    font-family: Open Sans !important;
     font-style: normal;
+    font-weight: normal;
     font-size: 14px;
-    line-height: 23px;
+    line-height: 22px;
+    color: #121212 !important;
 }
 
 .custom-select-wrapper {
@@ -245,6 +256,15 @@
     font-weight: bold;
     font-size: 24px;
     line-height: 38px;
+}
+
+.prices .price {
+    font-family: Open Sans !important;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 28px;
+    line-height: 45px;
+    color: #474747;
 }
 
 .prices .on-sale {
@@ -428,14 +448,14 @@
     font-family: Arapey !important;
     font-style: italic;
     font-weight: normal;
-    font-size: 48px;
+    font-size: 42px;
     line-height: 77px;
     color: #6a3405;
 }
 
 .matching-items .product-item {
-    width: 180px;
-    height: 245px;
+    width: 210px;
+    height: 275px;
     left: 0px;
     top: 0px;
 
@@ -457,8 +477,8 @@
 }
 
 .matching-items .product-item .product-img {
-    width: 120px;
-    height: 120px;
+    width: 150px;
+    height: 150px;
 }
 .product-img > img {
     height: 100%;
@@ -471,7 +491,7 @@
     font-family: Open Sans !important;
     font-style: normal;
     font-weight: bold;
-    font-size: 10px;
+    font-size: 12px;
     line-height: 14px;
     color: #121212;
     flex: none;
@@ -547,8 +567,12 @@
 }
 
 .product-row .product-item .product-img {
-    width: 150px;
-    height: 150px;
+    width: 170px;
+    height: 170px;
+}
+
+.product-item .product-img > img{
+    border-radius: 6px;
 }
 
 .product-row .product-item .product-info {
@@ -595,6 +619,7 @@
     font-size: 24px;
     line-height: 38px;
     color: #f68f36;
+    cursor: pointer;
 }
 .faq .card {
     border: none !important;
@@ -690,8 +715,8 @@
 }
 
 .upsale .upsale-img {
-    width: 180px;
-    height: 180px;
+    width: 250px;
+    height: 250px;
     border-radius: 10px;
 }
 .upsale .upsale-img > img {
@@ -747,4 +772,134 @@
 
 .upsale-variants-products .swatch-content .selected{
     border: 1px solid #f68f36 !important;
+}
+
+.dark-white-background{
+    background: #E5E5E5;
+    padding-bottom: 0px;
+}
+
+.cart-heading{
+    font-family: Open Sans !important;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 36px;
+    line-height: 44px;
+    /* identical to box height, or 122% */
+
+    text-align: center;
+
+    /* Neutral / Grey 600 */
+
+    color: #7B7B7B;
+}
+.free-ship-announcement{
+    height: 51px;
+    background: #33CC7F;
+}
+.free-ship-announcement >h5{
+    font-family: Open Sans !important;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 32px;
+    /* identical to box height, or 160% */
+
+    text-align: center;
+
+    /* Neutral / Grey 100 */
+
+    color: #FFFFFF;
+}
+.white-pannel{
+    background: #ffffff;
+    border-radius: 10px;
+}
+.white-section{
+    background: #ffffff;
+}
+.progress .progress-bar{
+    background: #F68F36 !important;
+}
+.free-shipping-heading{
+    font-family: Open Sans !important;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 32px;
+}
+.cart-item-img{
+    height: 210px;
+    width: 210px;
+}
+.cart-item-img > img{
+    border-radius: 6px;
+    height: 100%;
+}
+.cart-item-details .cart-item-name{
+    font-family: Open Sans !important;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 20px;
+    color: #121212;
+}
+.cart-item-details .price{
+    font-family: Open Sans !important;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 20px;
+    color: #121212;
+}
+.qty{
+    width: 100%;
+    text-align: center;
+    border-radius: 6px;
+    border: 1.5px solid black !important;
+}
+.qty-controler{
+    font-size: 28px;
+}
+.dec-qty{
+    position: absolute;
+    padding-left: 5px;
+    top: 20%;
+    cursor: pointer;
+}
+.inc-qty{
+    position: absolute;
+    top: 20%;
+    left: 150px;
+    cursor: pointer;
+}
+.btn-add-more-item{
+    /* border: 1px solid #f68f36 !important; */
+    background: #f68f36 !important;
+    color: #FFFFFF !important;
+    box-sizing: border-box;
+    border-radius: 6px;
+}
+.btn-add-more-item:hover{
+    background: #8b4c15 !important;
+    border: none;
+    border-radius: 6px !important;
+}
+.btn-orange:hover{
+    border: 1px solid #f68f36 !important;
+    background: white;
+    box-sizing: border-box;
+    border-radius: 6px;
+    color: #f68f36 !important;
+}
+.cart-subtotal{
+    font-family: Open Sans !important;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 38px;
+    color: #474747;
+}
+.w-99{
+    width: 99.9%;
 }

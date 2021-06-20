@@ -1,29 +1,32 @@
 <header class="site-header d-flex" role="banner">
   <div class="header-container my-auto w-100 d-none d-md-block">
     <div class="row">
-      <div class="col-md-1 my-auto">
-        <a href="/">
+      <div class="col-md-2 my-auto">
+        <a href="/" class="w-100 text-center">
           <img class="logo" src="{{'logo.png' | asset_img_url: '200x'}}">
         </a>
       </div>
-      <div class="col-md-4 pl-5 d-flex">
-        <div class="input-group w-75 my-auto">
-          <input class="form-control py-2 search-form border-right-none" type="search" value="What are you looking for?"
-            id="example-search-input">
-          <span class="input-group-append ">
-            <button class="btn btn-outline-secondary border search-form border-left-none" type="button">
-              <i class="fa fa-search"></i>
-            </button>
-          </span>
+      <div class="col-md-3 pl-0 d-flex">
+        
+        <div class="input-group w-100 my-auto">
+          <form action="/search" method="get" class="input-group search-bar" role="search">
+            <input class="form-control py-2 search-form border-right-none" type="text" name="q" value="{{ search.terms | escape }}" placeholder="What are you looking for?"
+              id="example-search-input">
+            <span class="input-group-append ">
+              <button class="btn btn-outline-secondary search-form border-left-none" type="submit">
+                <i class="fa fa-search"></i>
+              </button>
+            </span>
+          </form>
         </div>
         <!-- <p class="m-0">Trending searches: </p> -->
 
       </div>
-      <div class="col-md-7">
+      <div class="col-md-7 my-auto">
         <div class="nav-container d-flex">
           <div class="dropdown my-auto mx-4">
             <div class="nav-menu menu-text">
-              <a class="menu-text">Best selling</a>
+              <a class="menu-text mb-0" href="/collections/all-products">Best selling</a>
             </div>
           </div>
           <div class="dropdown my-auto mx-4">
@@ -38,18 +41,37 @@
                     </div>
                     <div class="col-8">
                       <div class="row">
-                        <div class="col-3">
-                          <h4 class="menu-name">First</h3>
+                        {% assign haveSubMenu = "home-decor,type-of-witch,popular-quotes" | split: ','%}
+                        {% assign noSubMenu = "frightful-design,witch-clothing,mug" | split: ',' %}
+                        
+                        <div class="col-3" style="display: grid;">
+                          {% for link in linklists.main-menu.links %}
+                            {% if link.handle == "latest-designs" %}
+                              {% for child_link in linklists[link.handle].links %}
+                                {% if noSubMenu contains child_link.handle%}
+                                  <a class="menu-name" href="{{child_link.url}}">{{child_link.title}}</a>
+                                {% endif %}
+                              {% endfor %}
+                            {% endif %}
+                          {% endfor %}
                         </div>
-                        <div class="col-3">
-                          <h4 class="menu-name">Second</h3>
-                        </div>
-                        <div class="col-3">
-                          <h4 class="menu-name">Third</h3>
-                        </div>
-                        <div class="col-3">
-                          <h4 class="menu-name">Fourth</h3>
-                        </div>
+                        {% for link in linklists.main-menu.links %}
+                            {% if link.handle == "latest-designs" %}
+                              {% for child_link in linklists[link.handle].links %}
+                                {% if haveSubMenu contains child_link.handle%}
+                                  <div class="col-3" style="display: grid;">
+                                    <a class="menu-name" href="{{child_link.url}}">{{child_link.title}}</a>
+                                      {% for item in linklists[child_link.handle].links %}
+                                      <a class="menu-item" href="{{item.url}}">{{item.title}}</a>
+                                      {% endfor %}
+                                  </div>
+                                  
+                                {% endif %}
+                              {% endfor %}
+                            {% endif %}
+                          {% endfor %}
+                        
+                        
                       </div>
                     </div>
                   </div>
@@ -59,12 +81,16 @@
             </div>
           </div>
           <div class="dropdown my-auto mx-4">
-            <div class="nav-menu menu-text">Blog</div>
+            <div class="nav-menu menu-text">
+              <a class="menu-text mb-0" href="/blogs/wicca">Blogs</a>
+            </div>
           </div>
           <div class="dropdown my-auto mx-4">
-            <div class="nav-menu menu-text">Contact</div>
+            <div class="nav-menu menu-text">
+              <a class="menu-text mb-0" href="/pages/contact-us">Contact</a>
+            </div>
           </div>
-
+          {%- comment -%}
           <div class="custom-select-wrapper select-lang my-auto mx-4">
             <div class="twippy-custom-select">
               <div class="custom-select__trigger"><span>{{ 'twippy_us_flag.png' | asset_url | img_tag: 'English' }}EN</span>
@@ -80,6 +106,7 @@
               </div>
             </div>
           </div>
+          {%- endcomment -%}
 
           <div class="custom-select-wrapper select-currency my-auto mx-4">
             <div class="twippy-custom-select">
@@ -99,15 +126,16 @@
             </div>
           </div>
 
+
           <div class="dropdown my-auto mx-4">
             <div class="nav-menu ">
-              <a href="/apps/trackorder" class="menu-text">Track your order</a>
+              <a href="/apps/trackorder " class="menu-text mb-0">Track your order</a>
             </div>
           </div>
 
           <div class="dropdown my-auto mx-4">
             <div class="nav-menu menu-text">
-              <a class="cart added" href="/cart">
+              <a class="cart added mb-0" href="/cart">
                 <svg class="pc" width="24" height="23" viewBox="0 0 24 23" fill="none"
                   xmlns="http://www.w3.org/2000/svg">
                   <path fill-rule="evenodd" clip-rule="evenodd"
@@ -147,21 +175,26 @@
       </div>
       <div class="col-3 text-center d-flex">
         <div class="mx-auto my-auto">
-          <img src="{{'shopping-cart.png' | | asset_img_url: 'master'}}">
-        </div>
+          <a href="/cart">
+            <img src="{{'shopping-cart.png' | | asset_img_url: 'master'}}">
+          </a>
+          
+      </div>
       </div>
     </div>
     <div class="row">
       <div class="offset-1"></div>
       <div class="col-10 p-0">
         <div class="input-group w-100 my-auto">
-          <input class="form-control py-2 search-form border-right-none" type="search" placeholder="What are you looking for?"
+          <form action="/search" method="get" class="input-group search-bar" role="search">
+            <input class="form-control py-2 search-form border-right-none" type="text" name="q" value="{{ search.terms | escape }}" placeholder="What are you looking for?"
             id="example-search-input">
-          <span class="input-group-append ">
-            <button class="btn btn-outline-secondary border search-form border-left-none" type="button">
-              <i class="fa fa-search"></i>
-            </button>
-          </span>
+            <span class="input-group-append ">
+              <button class="btn btn-outline-secondary search-form border-left-none" type="submit">
+                <i class="fa fa-search"></i>
+              </button>
+            </span>
+          </form>
         </div>
       </div>
       <div class="offset-1"></div>
@@ -170,19 +203,34 @@
 </header>
 <div id="mySidenav" class="sidenav">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <a href="#">Best Selling</a>
+  <a  href="/collections/all-products">Best Selling</a>
   <a data-toggle="collapse" href="#collectionCollapse" role="button" aria-expanded="false" aria-controls="collectionCollapse">Collection</a>
   <div class="collapse" id="collectionCollapse">
     <div class="card card-body">
-      <a>Fightful Design</a>
-      <a>Witch Clothing</a>
-      <a>Mug</a>
-      <a>Type Of Witch</a>
-      <a>Popular Quotes</a>
+
+      {% for link in linklists.main-menu.links %}
+        {% if link.handle == "latest-designs" %}
+          {% for child_link in linklists[link.handle].links %}
+            {% if haveSubMenu contains child_link.handle%}
+                <a data-toggle="collapse" href="#{{child_link.handle}}" role="button" aria-expanded="false" aria-controls="{{child_link.handle}}">{{child_link.title}}</a>
+                <div class="collapse" id="{{child_link.handle}}">
+                  <div class="card card-body">
+                    {% for item in linklists[child_link.handle].links %}
+                      <a class="" href="{{item.url}}">{{item.title}}</a>
+                    {% endfor %}
+                  </div>
+                </div>
+            {% else %}
+              <a class="text-white" href="{{child_link.url}}">{{child_link.title}}</a>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      {% endfor %}
+      
     </div>
   </div>
-  <a href="#">Blocks</a>
-  <a href="#">Contact</a>
+  <a href="/blogs/wicca">Blogs</a>
+  <a href="/pages/contact-us">Contact</a>
 </div>
 <script>
   function openNav() {

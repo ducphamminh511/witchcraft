@@ -3,6 +3,7 @@
 {% endcomment %}
 
 {% assign file_extension = 'png' %}
+
 {% if swatch == blank %}
     <div class="swatch error">
         <p>You must include the snippet swatch.liquid with the name of a product option.</p>
@@ -21,7 +22,7 @@
             {% assign option_index = forloop.index0 %}
             <style>
                 label[for="product-select-option-{{ option_index }}"] { display: none; }
-                #add-to-cart-form .selector-wrapper {display:none}
+                #modal-add-to-cart-form .selector-wrapper {display:none}
                 #product-select-option-{{ option_index }} { display: none; }
                 #product-select-option-{{ option_index }} + .custom-style-select-box { display: none !important; }
             </style>
@@ -42,7 +43,7 @@
         </div>
     {% else %}
         {% if is_color %}
-            <div class="row swatch-base swatch product-color clearfix" data-option-index="{{ option_index }}"  {% if swatch == "Style" %} style="display:none" {% endif %}>
+            <div class="row modal-swatch swatch product-color clearfix" data-option-index="{{ option_index }}"  {% if swatch == "Style" %} style="display:none" {% endif %}>
                 <div class="col-md-2 my-auto">
                     <div class="title d-flex justify-content-between align-items-center">
                         <h4 class="font-weight-lightbold text-capitalize">{{ swatch | upcase }}</h4>
@@ -74,7 +75,7 @@
                 </div>
             </div>
         {% else %}
-            <div class="row swatch-base swatch product-variants clearfix" data-option-index="{{ option_index }}"  {% if swatch == "Style" %} style="display:none" {% endif %}>
+            <div class="row modal-swatch swatch product-variants clearfix" data-option-index="{{ option_index }}"  {% if swatch == "Style" %} style="display:none" {% endif %}>
                 <div class="col-md-2 my-auto">
                     <div class="title d-flex justify-content-between align-items-center">
                         <h4 class="font-weight-lightbold text-capitalize">{{ swatch | upcase }}</h4>

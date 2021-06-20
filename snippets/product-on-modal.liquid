@@ -4,6 +4,10 @@
             <img class="h-100" src="{{ product | img_url:'medium' }}">
         </div>
         <h6 class="upsale-title w-100 pt-3">{{product.title | upcase}}</h6>
+        
+    </div>
+    <form action="/cart/add" method="post" enctype="multipart/form-data" id="modal-add-to-cart-form">
+        <input type="hidden" id="variantID" name="variantID" value="{{product.variants.first.id}}">
         <div class="upsale-prices">
             {% if product.compare_at_price > product.price %}
                 <span class="price on-sale pr-3" itemprop="price">{{ product.price | money }}</span>
@@ -13,113 +17,267 @@
                 <span class="price" itemprop="price">{{ product.price | money }}</span>
             {% endif %}
         </div>
-    </div>
-    <div class="upsale-variants-products mt-4">
-        <div class="row">
-            <div class="col-md-2 my-auto">
-                <div class="title d-flex justify-content-between align-items-center">
-                    <h4 class="font-weight-lightbold text-capitalize">STYLE</h4>
-    
+        <!-- <div class="upsale-variants-products mt-4">
+            <div class="row">
+                <div class="col-md-2 my-auto">
+                    <div class="title d-flex justify-content-between align-items-center">
+                        <h4 class="font-weight-lightbold text-capitalize">STYLE</h4>
+        
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-8">
-                {% assign productstyle_index = -1 %}
-                {% for option in product.options %}
-                  {% if option == "Style" %}
-                    {% assign productstyle_index = forloop.index0 %}
-                  {% endif %}
-              {% endfor %}
-            
-            
-             {% if productstyle_index >= 0 %}
-              <div class="wrap-select-box">
-                  <select id="select-box-style">
-                      {% assign values = '' %}
-                      {% for variant in product.variants %}
-                          {% assign value = variant.options[productstyle_index] %}
-                          {% unless values contains value %}
-                          {% assign values = values | join: ',' %}
-                          {% assign values = values | append: ',' | append: value %}
-                          {% assign values = values | split: ',' %}
-                              <option data-id="{{ variant.id  }}" data-url="{{ variant.url }}"{% if forloop.first %} selected{% endif %} value="{{ variant.id }}" data-value="{{ value | handle }}">{{ value }}</option>
-                          {% endunless %}
-                      {% endfor %}
-                  </select>
-              </div>
-                {% endif %}
-            </div>
-            <div class="offset-md-2"></div>
-        </div>
-    </div>
-
-    <div class="upsale-variants-products mt-4" id="product-variants">
-        {% assign variantCount = product.variants | size %}
-        {% if product.available %}
-            {% if variantCount > 1 %}
-                <select id="product-selectors" name="id" style="display:none">
-                    {% for variant in product.variants %}
-                        <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %}
-                                value="{{ variant.id }}">{{ variant.title }}
-                            - {{ variant.price | money }}</option>
-                    {% endfor %}
-                </select>
-    
-                {% if settings.use_color_swatch %}
+                <div class="col-md-8">
+                    {% assign productstyle_index = -1 %}
                     {% for option in product.options %}
-                        {% include 'swatch' with option %}
-                    {% endfor %}
-                {% endif %}
-            {% else %}
-                <input type="hidden" name="id" value="{{ product.variants[0].id }}"/>
-            {% endif %}
-        {% endif %}
-    </div>
-
-    <div class="product-qty">
-        <div class="row">
-            <div class="col-md-2 my-auto">
-                <label for="quantity">QTY</label>
-            </div>
-            <div class="col-md-4 my-auto">
-                {% if product.available %}
+                      {% if option == "Style" %}
+                        {% assign productstyle_index = forloop.index0 %}
+                      {% endif %}
+                  {% endfor %}
                 
-                <div class="wrap-select-box m-0">
-                    <select id="quantity-select" name="quantity">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                    </select>
+                
+                 {% if productstyle_index >= 0 %}
+                  <div class="wrap-select-box">
+                      <select id="modal-select-box-style">
+                          {% assign values = '' %}
+                          {% for variant in product.variants %}
+                              {% assign value = variant.options[productstyle_index] %}
+                              {% unless values contains value %}
+                              {% assign values = values | join: ',' %}
+                              {% assign values = values | append: ',' | append: value %}
+                              {% assign values = values | split: ',' %}
+                                  <option data-id="{{ variant.id  }}" data-url="{{ variant.url }}"{% if forloop.first %} selected{% endif %} value="{{ variant.id }}" data-value="{{ value | handle }}">{{ value }}</option>
+                              {% endunless %}
+                          {% endfor %}
+                      </select>
+                  </div>
+                    {% endif %}
                 </div>
-                {%endif%}
+                <div class="offset-md-2"></div>
             </div>
-            <div class="col-md-6 my-auto">
-                {% if product.available %}
-                    <input type="hidden" id="quantity" name="quantity" value="1">
-                    <div class="buy-now m-0">
-                        <input type="submit" name="add" class="btn m-0 btn-orange"
-                            {% if settings.enable_multilang %}data-translate="products.product.add_to_cart"{% endif %}
-                            id="product-add-to-cart"
-                            value="{{ 'products.product.add_to_cart' | t }}">
-                    </div>
+        </div> -->
+    
+        <div class="upsale-variants-products mt-4" id="modal-product-variants">
+            {% assign variantCount = product.variants | size %}
+            {% if product.available %}
+                {% if variantCount > 1 %}
+                    <select id="modal-product-selectors" name="id" style="display:none">
+                        {% for variant in product.variants %}
+                            <option {% if variant == product.selected_or_first_available_variant %} selected="selected" {% endif %}
+                                    value="{{ variant.id }}">{{ variant.title }}
+                                - {{ variant.price | money }}</option>
+                        {% endfor %}
+                    </select>
+                    <!-- {% assign isModal = true %}
+                    {% if settings.use_color_swatch %}
+                        {% for option in product.options %}
+                            {% render 'swatch-on-modal',swatch: option, isModal: isModal %}
+                        {% endfor %}
+                    {% endif %} -->
                 {% else %}
-                    <div class="buy-now m-0">
-
-                    <input type="submit" name="add" class="btn m-0"
-                            {% if settings.enable_multilang %}data-translate="products.product.unavailable"{% endif %}
-                            id="product-add-to-cart" disabled
-                            value="{{ 'products.product.unavailable' | t }}">
-                    </div>
+                    <input type="hidden" name="id" value="{{ product.variants[0].id }}"/>
                 {% endif %}
-            </div>
+            {% endif %}
         </div>
-        
-        
-    </div>
+    
+        <div class="product-qty">
+            <div class="row">
+                <div class="col-md-2 my-auto">
+                    <label for="quantity">QTY</label>
+                </div>
+                <div class="col-md-4 my-auto">
+                    {% if product.available %}
+                    
+                    <div class="wrap-select-box m-0">
+                        <select id="modal-quantity-select" name="quantity">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
+                    </div>
+                    {%endif%}
+                </div>
+                <div class="col-md-6 my-auto">
+                    {% if product.available %}
+                        <input type="hidden" id="modal-quantity" name="quantity" value="1">
+                        <div class="buy-now m-0">
+                            <input type="submit" name="add" class="btn m-0 btn-orange"
+                                {% if settings.enable_multilang %}data-translate="products.product.add_to_cart"{% endif %}
+                                id="modal-add-to-cart"
+                                value="{{ 'products.product.add_to_cart' | t }}">
+                        </div>
+                    {% else %}
+                        <div class="buy-now m-0">
+    
+                        <input type="submit" name="add" class="btn m-0"
+                                {% if settings.enable_multilang %}data-translate="products.product.unavailable"{% endif %}
+                                id="modal-add-to-cart" disabled
+                                value="{{ 'products.product.unavailable' | t }}">
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            
+        </div>
+    </form>
+    
 </div>
+
+<script>
+    // $(document).ready(function(){
+    //     var g = $(".product-variants .swatch-element").length;
+    //     $("#modal-select-box-style").on("change", function () {
+    //     var b = $(this).find(":selected").data("url"),
+    //         d = $(this).val();
+    //     $(".inner-rp-img a").removeClass("active");
+    //     $('.inner-rp-img[data-id="' + d + '"] a').addClass("active");
+    //     $('#variantID').val(d);
+    //     5 == g ? $(".product-variants .select-value").text("One Size") : $(".product-variants .select-value").text("S");
+    //     $(".product-color .select-value").text(m);
+    //     $('#modal-quantity-select').on('change', function(){
+    //         qty = $('#modal-quantity-select option:selected').val();
+    //         $('modal-quantity').val(qty)
+    //     })
+    // });
+    // })
+</script>
+
+<script>
+
+    // $('.modal-swatch :radio').change(function () {
+    //     alert('ahihi')
+    //     var optionIndex = $(this).closest('.modal-swatch').attr('data-option-index');
+    //     var optionValue = $(this).val();
+    //     $(this)
+    //         .closest('form')
+    //         .find('.single-option-selector')
+    //         .eq(optionIndex)
+    //         .val(optionValue)
+    //         .trigger('change');
+    // });
+
+    // var selectCallback = function (variant, selector) {
+    //     console.log('on modal')
+
+    //     var addToCart = jQuery('#modal-add-to-cart'),
+    //         productPrice = jQuery('.upsale-prices .price'),
+    //         comparePrice = jQuery('.upsale-prices .compare-price');
+           
+
+    //     if (variant) {
+    //         if (variant.available) {
+    //             // We have a valid product variant, so enable the submit button
+    //             addToCart.removeClass('disabled').removeAttr('disabled').val(window.inventory_text.add_to_cart);
+
+    //         } else {
+    //             // Variant is sold out, disable the submit button
+    //             addToCart.val(window.inventory_text.sold_out).addClass('disabled').attr('disabled', 'disabled');
+    //         }
+
+    //         // Regardless of stock, update the product price
+    //         productPrice.html(Shopify.formatMoney(variant.price, "{{ shop.money_format }}"));
+
+    //         // Also update and show the product's compare price if necessary
+    //         if (variant.compare_at_price > variant.price) {
+    //             productPrice.addClass("on-sale")
+    //             comparePrice
+    //                 .html(Shopify.formatMoney(variant.compare_at_price, "{{ shop.money_format }}"))
+    //                 .show();
+    //         } else {
+    //             comparePrice.hide();
+    //             productPrice.removeClass("on-sale");
+    //         }
+    //         {% if settings.use_color_swatch %}
+    //         // BEGIN SWATCHES
+    //         var form = jQuery('#' + selector.domIdPrefix).closest('form');
+    //         console.log(selector.domIdPrefix);
+    //         console.log(form);
+    //         for (var i = 0, length = variant.options.length; i < length; i++) {
+    //             console.log(variant.options[i]);
+    //             var radioButton = form.find('.modal-swatch[data-option-index="' + i + '"] :radio[value="' + variant.options[i] + '"]');
+    //             console.log(radioButton);
+    //             if (radioButton.size()) {
+    //                 radioButton.get(0).checked = true;
+    //             }
+    //         }
+    //         // END SWATCHES
+    //         {% endif %}
+
+    //         {% if settings.display_subtotal and product.available %}
+    //         updatePricing();
+    //         {% endif %}
+
+    //         {% if settings.enable_multiple_currencies %}
+    //         Currency.convertAll('{{ shop.currency }}', jQuery('#currencies').val(), 'span.money', 'money_format');
+    //         {% endif %}
+
+    //     } else {
+    //         // The variant doesn't exist. Just a safeguard for errors, but disable the submit button anyway
+    //         addToCart.val(window.inventory_text.unavailable).addClass('disabled').attr('disabled', 'disabled');
+    //     }
+
+    // };
+
+    // jQuery(function ($) {
+    //     {% if product.available and product.variants.size > 1 %}
+    //     new Shopify.OptionSelectors('modal-product-selectors', {
+    //         product: {{ product | json }},
+    //         onVariantSelected: selectCallback,
+    //         enableHistoryState: true
+    //     });
+    //     {% if settings.use_color_swatch and product.available and product.options.size > 1 %}
+    //     Shopify.linkOptionSelectors({{ product | json }});
+    //     {% endif %}
+
+    //     {% if settings.use_color_swatch != true %}
+    //     jQuery('.single-option-selector').selectize();
+    //     jQuery('.selectize-input input').attr("disabled", "disabled");
+    //     {% endif %}
+
+    //     {% endif %}
+
+    //     // Add label if only one product option and it isn't 'Title'. Could be 'Size'.
+    //     {% if product.options.size == 1 and product.options.first != 'Title' %}
+    //     $('.selector-wrapper:eq(0)').prepend('<label>{{ product.options.first }}</label>');
+    //     {% endif %}
+
+    //     // Hide selectors if we only have 1 variant and its title contains 'Default'.
+    //     {% if product.variants.size == 1 and product.variants.first.title contains 'Default' %}
+    //     $('.selector-wrapper').hide();
+    //     {% endif %}
+
+    //     // Auto-select first available variant on page load. Otherwise the product looks sold out.
+    //     {% assign found_one_in_stock = false %}
+    //     {% for variant in product.variants %}
+    //     {% if variant.available and found_one_in_stock == false %}
+    //     {% assign found_one_in_stock = true %}
+    //     {% for option in product.options %}
+    //     $('.single-option-selector:eq({{ forloop.index0 }})').val({{ variant.options[forloop.index0] | json }}).trigger('change');
+    //     {% endfor %}
+    //     {% endif %}
+    //     {% endfor %}
+
+    //     {% if settings.display_product_reviews %}
+    //     var reviewsTimeout = setInterval(function () {
+    //         if (jQuery(".spr-badge-caption").length > 0) {
+    //             jQuery(".spr-badge-caption").on('click', function () {
+    //                 jQuery('html,body').animate({
+    //                         scrollTop: jQuery(".panel:last").offset().top
+    //                     },
+    //                     '400');
+    //                 jQuery("#collapse-tab4").collapse('show');
+    //             });
+    //             clearInterval(reviewsTimeout);
+    //         }
+    //     }, 1000);
+
+    //     {% endif %}
+
+    // });
+</script>

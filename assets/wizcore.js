@@ -25,6 +25,17 @@
                 .trigger('change');
         });
 
+        $('.modal-swatch :radio').change(function () {
+            var optionIndex = $(this).closest('.swatch').attr('data-option-index');
+            var optionValue = $(this).val();
+            $(this)
+                .closest('form')
+                .find('.single-option-selector')
+                .eq(optionIndex)
+                .val(optionValue)
+                .trigger('change');
+        });
+
         // (c) Copyright 2014 Caroline Schnapp. All Rights Reserved. Contact: mllegeorgesand@gmail.com
         // See http://docs.shopify.com/manual/configuration/store-customization/advanced-navigation/linked-product-options
 
@@ -1051,7 +1062,6 @@
             if ($('#product-add-to-cart').length == 0) {
                 $('#product-add-to-cart').on('click', function (event) {
                     event.preventDefault();
-                    alert('abc dcm333');
 
                     if ($(this).attr('disabled') != 'disabled') {
                         if (!window.ajax_cart) {
@@ -1068,7 +1078,6 @@
                             }
                             var title = $('.product-title h2').html();
                             var image = $('#product-featured-image').attr('src');
-                            alert('abc dcm4444');
 
                             wizcore.doAjaxAddToCart(variant_id, quantity, title, image);
                         }

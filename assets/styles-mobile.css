@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Arapey:ital@0;1&family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap");
 .header-mobile-container {
     width: 100%;
 }
@@ -5,7 +8,7 @@
     height: 100%;
     width: 0;
     position: fixed;
-    z-index: 1;
+    z-index: 1000;
     top: 130px;
     left: 0;
     background-color: #111;
@@ -50,14 +53,9 @@
     font-weight: bold;
     font-size: 14px;
     line-height: 19px;
-    /* identical to box height */
-
     text-align: justify;
     text-transform: uppercase;
-
-    /* Orange / 500 */
-
-    color: #f68f36;
+    color: #f68f36 !important;
 }
 
 .footer-mobile-container .footer-menu .footer-menu-heading {
@@ -169,6 +167,15 @@
         font-size: 16px;
         line-height: 26px;
     }
+    .inc-qty{
+        left: 180px
+    }
+    .free-ship-announcement>h5{
+        font-size: 16px;
+    }
+    .w-99{
+        width: auto;
+    }
 }
 @media screen and (max-height: 450px) {
     .sidenav {
@@ -180,7 +187,12 @@
     .related-collection-heading {
         font-size: 28px;
     }
+    
 }
 
 @media screen and (max-width: 640px) {
+    .inc-qty{
+        left: 180px
+    }
 }
+
